@@ -12,7 +12,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 50px repeat(4, 1fr);
-  grid-column-gap: 0px;
+  grid-column-gap: 0;
   grid-row-gap: 10px;
   height: 100vh;
 }
