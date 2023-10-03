@@ -1,11 +1,11 @@
 {
   "usesTypeScript": true,
-  "usesStyledComponents": true,
+  "usesStyledComponents": false,
   "testLibrary": "None",
   "component": {
     "default": {
       "path": "src/components",
-      "withStyle": true,
+      "withStyle": false,
       "withTest": false,
       "withStory": false,
       "withLazy": false
