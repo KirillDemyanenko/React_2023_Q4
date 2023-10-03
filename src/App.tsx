@@ -3,6 +3,7 @@ import React from 'react';
 import { PokemonSearchInfo, Props, State } from './types';
 import Search from './components/Search';
 import Item from './components/Item';
+import notFound from './assets/ditto.png';
 
 export default class App extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -35,6 +36,14 @@ export default class App extends React.Component<Props, State> {
     return (
       <>
         <Search searchMethod={this.search} />
+        {this.state.pokemons.length === 0 ? (
+          <div className={'not-found'}>
+            <img src={notFound} alt="not found" />
+            <h3>Nothing was found...</h3>
+          </div>
+        ) : (
+          <></>
+        )}
         {this.state.pokemons.map((el) => {
           return <Item pokemonInfo={el} key={el.name} id={el.name} />;
         })}
