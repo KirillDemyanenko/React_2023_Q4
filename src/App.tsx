@@ -1,14 +1,13 @@
 import './App.css';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { PokemonSearchInfo, Props, State } from './types';
+import Search from './components/Search';
+import Item from './components/Item';
 
 export default class App extends React.Component<Props, State> {
-  search: RefObject<HTMLInputElement>;
   constructor(props: Props) {
     super(props);
     this.state = { pokemons: [] };
-    this.handleClick = this.handleClick.bind(this);
-    this.search = React.createRef();
   }
 
   async getData(additional: string): Promise<PokemonSearchInfo[]> {
@@ -25,24 +24,12 @@ export default class App extends React.Component<Props, State> {
     return await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then((data) => data.json());
   }
 
-  async handleClick(): Promise<void> {
-    this.setState({ pokemons: await this.getData('?limit=10') });
-  }
-
   render() {
     return (
       <>
-        <div className="search">
-          <input type="text" ref={this.search} placeholder={'Type something...'} />
-          <button onClick={this.handleClick}>search</button>
-        </div>
+        <Search searchText={''} />
         {this.state.pokemons.map((el, i) => {
-          return (
-            <div className="res" key={i}>
-              <h4>{el.name}</h4>
-              <a href={el.url}>more info</a>
-            </div>
-          );
+          return <Item pokemonInfo={el} key={i} />;
         })}
       </>
     );

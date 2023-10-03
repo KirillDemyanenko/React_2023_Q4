@@ -2,9 +2,7 @@ export type State = {
   pokemons: PokemonSearchInfo[];
 };
 
-export type Props = {
-  name: string;
-};
+export type Props = NonNullable<unknown>;
 
 export type PokemonSearchInfo = {
   name: string;
@@ -16,4 +14,13 @@ export type PokemonsResponse = {
   next: string | null;
   previous: string | null;
   results: PokemonSearchInfo[];
+};
+
+export type SearchProps = {
+  searchText: string;
+};
+
+export type ItemProps = {
+  pokemonInfo: PokemonSearchInfo;
+  key: number;
 };
