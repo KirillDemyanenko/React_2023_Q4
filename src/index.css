@@ -47,7 +47,8 @@ button:hover {
 }
 
 .res {
-  border: 1px solid var(--main-bg-color-hover);
+  border: 5px groove wheat;
+  box-shadow: 3px 3px burlywood;
   border-radius: 10px;
   padding: 5px;
   display: flex;

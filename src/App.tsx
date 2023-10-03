@@ -35,8 +35,8 @@ export default class App extends React.Component<Props, State> {
     return (
       <>
         <Search searchMethod={this.search} />
-        {this.state.pokemons.map((el, i) => {
-          return <Item pokemonInfo={el} key={i} />;
+        {this.state.pokemons.map((el) => {
+          return <Item pokemonInfo={el} key={el.name} id={el.name} />;
         })}
       </>
     );

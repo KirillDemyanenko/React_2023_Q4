@@ -27,7 +27,8 @@ export type PokemonsResponse = {
 
 export type ItemProps = {
   pokemonInfo: PokemonSearchInfo;
-  key: number;
+  key: string;
+  id: string;
 };
 
 export type Ability = {

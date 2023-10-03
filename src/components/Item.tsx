@@ -3,7 +3,6 @@ import { ItemProps, ItemState, PokemonInfo } from '../types';
 import image from '../assets/load.gif';
 export default class Item extends React.Component<ItemProps, ItemState> {
   info: PokemonInfo = {} as PokemonInfo;
-  image = '';
   constructor(props: ItemProps) {
     super(props);
     this.state = { isLoad: false, imgURL: '' };
@@ -16,7 +15,7 @@ export default class Item extends React.Component<ItemProps, ItemState> {
 
   render() {
     return (
-      <div className="res" key={this.props.key}>
+      <div className="res" key={this.props.id}>
         <h4>{this.props.pokemonInfo.name}</h4>
         <img src={this.state.isLoad ? this.state.imgURL : image} alt="img" />
         <p>Height: {this.info.height || 'Loading...'}</p>

@@ -3,10 +3,12 @@ import { SearchProps, State } from '../types';
 
 export default class Search extends React.Component<SearchProps, State> {
   search: RefObject<HTMLInputElement>;
+  timerID: number;
   constructor(props: SearchProps) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.search = React.createRef();
+    this.timerID = -1;
   }
 
   async handleClick(): Promise<void> {
