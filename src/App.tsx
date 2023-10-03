@@ -20,10 +20,6 @@ export default class App extends React.Component<Props, State> {
     this.setState({ pokemons: await this.getData('?limit=20') });
   }
 
-  async getPokemonInfo(name: string) {
-    return await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then((data) => data.json());
-  }
-
   render() {
     return (
       <>
