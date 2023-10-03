@@ -10,8 +10,7 @@ export default class Search extends React.Component<SearchProps, State> {
   }
 
   async handleClick(): Promise<void> {
-    console.log(this.search.current?.value);
-    // this.setState({ pokemons: await this.getData('?limit=10') });
+    this.props.searchMethod(this.search.current?.value || '');
   }
 
   render() {

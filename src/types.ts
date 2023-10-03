@@ -2,6 +2,10 @@ export type State = {
   pokemons: PokemonSearchInfo[];
 };
 
+export type SearchProps = {
+  searchMethod: (text: string) => void;
+};
+
 export type ItemState = {
   isLoad: boolean;
   imgURL: string;
@@ -19,10 +23,6 @@ export type PokemonsResponse = {
   next: string | null;
   previous: string | null;
   results: PokemonSearchInfo[];
-};
-
-export type SearchProps = {
-  searchText: string;
 };
 
 export type ItemProps = {

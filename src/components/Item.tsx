@@ -11,7 +11,6 @@ export default class Item extends React.Component<ItemProps, ItemState> {
 
   async componentDidMount() {
     this.info = await fetch(this.props.pokemonInfo.url).then((data) => data.json());
-    console.log(this.info);
     this.setState({ isLoad: true, imgURL: this.info.sprites.front_default as string });
   }
 

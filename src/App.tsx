@@ -8,6 +8,7 @@ export default class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { pokemons: [] };
+    this.search = this.search.bind(this);
   }
 
   async getData(additional: string): Promise<PokemonSearchInfo[]> {
@@ -20,10 +21,20 @@ export default class App extends React.Component<Props, State> {
     this.setState({ pokemons: await this.getData('?limit=20') });
   }
 
+  async search(text = '') {
+    if (text === '') {
+      this.setState({ pokemons: await this.getData('?limit=20') });
+    } else {
+      const allPokemons = await this.getData('?limit=2000');
+      this.setState({
+        pokemons: allPokemons.filter((el) => el.name.toLowerCase().includes(text.toLowerCase())),
+      });
+    }
+  }
   render() {
     return (
       <>
-        <Search searchText={''} />
+        <Search searchMethod={this.search} />
         {this.state.pokemons.map((el, i) => {
           return <Item pokemonInfo={el} key={i} />;
         })}
