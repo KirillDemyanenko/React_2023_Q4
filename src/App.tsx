@@ -17,7 +17,7 @@ export default class App extends React.Component<Props, State> {
   }
 
   async componentDidMount(): Promise<void> {
-    this.setState({ pokemons: await this.getData('?limit=10') });
+    this.setState({ pokemons: await this.getData('?limit=20') });
   }
 
   async getPokemonInfo(name: string) {
