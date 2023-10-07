@@ -18,10 +18,6 @@ export default class App extends React.Component<Props, State> {
       .then((res) => res.results);
   }
 
-  async componentDidMount(): Promise<void> {
-    this.setState({ pokemons: await this.getData('?limit=20') });
-  }
-
   async search(text = '') {
     if (text === '') {
       this.setState({ pokemons: await this.getData('?limit=20') });

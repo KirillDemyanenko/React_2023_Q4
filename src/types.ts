@@ -2,6 +2,10 @@ export type State = {
   pokemons: PokemonSearchInfo[];
 };
 
+export type SearchState = {
+  text: string;
+};
+
 export type SearchProps = {
   searchMethod: (text: string) => void;
 };

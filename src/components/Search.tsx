@@ -1,25 +1,38 @@
-import React, { RefObject } from 'react';
-import { SearchProps, State } from '../types';
+import React from 'react';
+import { SearchProps, SearchState } from '../types';
 
-export default class Search extends React.Component<SearchProps, State> {
-  search: RefObject<HTMLInputElement>;
-  timerID: number;
+export default class Search extends React.Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-    this.search = React.createRef();
-    this.timerID = -1;
+    this.state = { text: '' };
   }
 
-  async handleClick(): Promise<void> {
-    this.props.searchMethod(this.search.current?.value || '');
+  componentDidMount() {
+    const savedText = localStorage.getItem('pokedexSearch') || '';
+    this.setState({ text: savedText });
+    this.props.searchMethod(savedText);
+  }
+
+  handleClick(): void {
+    this.props.searchMethod(this.state.text);
+  }
+
+  saveToStarage(text: string) {
+    this.setState({ text: text });
+    localStorage.setItem('pokedexSearch', text);
   }
 
   render() {
     return (
       <>
         <div className="search">
-          <input type="text" ref={this.search} placeholder={'Type something...'} />
+          <input
+            type="text"
+            value={this.state.text}
+            onChange={(event) => this.saveToStarage(event.target.value)}
+            placeholder={'Type something...'}
+          />
           <button onClick={this.handleClick}>search</button>
         </div>
       </>
