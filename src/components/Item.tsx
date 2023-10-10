@@ -1,6 +1,9 @@
 import React from 'react';
-import { ItemProps, ItemState, PokemonInfo } from '../types';
+import { ItemProps, ItemState, PokemonInfo, TypesImages } from '../types';
 import image from '../assets/load.gif';
+import { images } from '../images';
+import { nanoid } from 'nanoid';
+
 export default class Item extends React.Component<ItemProps, ItemState> {
   info: PokemonInfo = {} as PokemonInfo;
   constructor(props: ItemProps) {
@@ -15,11 +18,9 @@ export default class Item extends React.Component<ItemProps, ItemState> {
 
   render() {
     return (
-      <div className="res" key={this.props.id}>
+      <div className={`res ${this.info?.types?.at(0)?.type?.name ?? ''}`} key={this.props.id}>
         <h4>{this.props.pokemonInfo.name}</h4>
         <img src={this.state.isLoad ? this.state.imgURL : image} alt="img" />
-        <p>Height: {this.info.height || 'Loading...'}</p>
-        <p>Weight: {this.info.weight || 'Loading...'}</p>
         <div className="stats">
           <h5>Stats</h5>
           {this.info?.stats?.map((stat) => {
@@ -31,7 +32,19 @@ export default class Item extends React.Component<ItemProps, ItemState> {
             );
           })}
         </div>
-        <a href={this.props.pokemonInfo.url}>more details</a>
+        <div className="icon">
+          {this.info?.types?.map((val) => {
+            const type = val.type.name;
+            return (
+              <img
+                src={images[type as keyof TypesImages]}
+                key={nanoid(5)}
+                alt={type}
+                className={type}
+              />
+            );
+          }) ?? 'loading'}
+        </div>
       </div>
     );
   }

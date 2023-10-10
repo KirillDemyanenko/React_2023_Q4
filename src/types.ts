@@ -61,7 +61,7 @@ type Stats = {
   };
 };
 
-type Types = {
+export type Types = {
   slot: number;
   type: {
     name: string;
@@ -202,4 +202,25 @@ export type PokemonInfo = {
   stats: Stats[];
   types: Types[];
   weight: number;
+};
+
+export type TypesImages = {
+  bug: string;
+  electric: string;
+  water: string;
+  dragon: string;
+  fairy: string;
+  fighting: string;
+  fire: string;
+  flying: string;
+  ghost: string;
+  grass: string;
+  ground: string;
+  ice: string;
+  normal: string;
+  dark: string;
+  poison: string;
+  psychic: string;
+  rock: string;
+  steel: string;
 };
