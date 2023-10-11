@@ -9,8 +9,6 @@ export type SearchState = {
 
 export type LoaderState = Record<string, never>;
 
-export type LoaderProps = Record<string, never>;
-
 export type SearchProps = {
   searchMethod: (text: string) => void;
 };
@@ -32,6 +30,10 @@ export type PokemonsResponse = {
   next: string | null;
   previous: string | null;
   results: PokemonSearchInfo[];
+};
+
+export type LoaderProps = {
+  isBig: boolean;
 };
 
 export type ItemProps = {
