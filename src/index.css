@@ -206,3 +206,13 @@ button:hover {
   background-color: #539ddf;
   box-shadow: 0 0 20px #539ddf;
 }
+
+.loader {
+  display: flex;
+  grid-row-start: 3;
+  grid-row-end: 5;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  background: center url('assets/load.gif') no-repeat;
+  background-size: contain;
+}

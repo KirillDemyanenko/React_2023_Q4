@@ -26,8 +26,8 @@ export default class Item extends React.Component<ItemProps, ItemState> {
           {this.info?.stats?.map((stat) => {
             return (
               <div className={'stats-row'} key={`stat-${stat.stat.name}`}>
-                <p className={'stats-info'}>{stat.stat?.name || 'Loading'}</p>
-                <p className={'stats-info'}>{stat?.base_stat || 'Loading'}</p>
+                <p className={'stats-info'}>{stat?.stat?.name ?? 'Loading'}</p>
+                <p className={'stats-info'}>{stat?.base_stat ?? 'Loading'}</p>
               </div>
             );
           })}

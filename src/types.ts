@@ -1,10 +1,15 @@
 export type State = {
   pokemons: PokemonSearchInfo[];
+  isLoading: boolean;
 };
 
 export type SearchState = {
   text: string;
 };
+
+export type LoaderState = Record<string, never>;
+
+export type LoaderProps = Record<string, never>;
 
 export type SearchProps = {
   searchMethod: (text: string) => void;
