@@ -36,7 +36,7 @@ export default class App extends React.Component<Props, State> {
       <>
         <Search searchMethod={this.search} />
         {this.state.isLoading ? (
-          <Loader />
+          <Loader isBig={true} />
         ) : (
           <>
             {this.state.pokemons.length === 0 ? (
