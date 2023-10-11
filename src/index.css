@@ -62,6 +62,12 @@ button:hover {
   border-radius: 10px;
   position: relative;
   margin: auto;
+  transition: transform 0.1s ease;
+}
+
+.res:hover {
+  transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+  scale: 0.9;
 }
 
 .res h4 {
