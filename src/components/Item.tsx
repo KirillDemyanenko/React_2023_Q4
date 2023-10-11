@@ -1,8 +1,8 @@
 import React from 'react';
 import { ItemProps, ItemState, PokemonInfo, TypesImages } from '../types';
-import image from '../assets/load.gif';
 import { images } from '../images';
 import { nanoid } from 'nanoid';
+import Loader from './Loader';
 
 export default class Item extends React.Component<ItemProps, ItemState> {
   info: PokemonInfo = {} as PokemonInfo;
@@ -17,17 +17,17 @@ export default class Item extends React.Component<ItemProps, ItemState> {
   }
 
   render() {
-    return (
+    return this.state.isLoad ? (
       <div className={`res ${this.info?.types?.at(0)?.type?.name ?? ''}`} key={this.props.id}>
         <h4>{this.props.pokemonInfo.name}</h4>
-        <img src={this.state.isLoad ? this.state.imgURL : image} alt="img" />
+        <img src={this.state.imgURL} alt="img" />
         <div className="stats">
           <h5>Stats</h5>
           {this.info?.stats?.map((stat) => {
             return (
               <div className={'stats-row'} key={`stat-${stat.stat.name}`}>
-                <p className={'stats-info'}>{stat?.stat?.name ?? 'Loading'}</p>
-                <p className={'stats-info'}>{stat?.base_stat ?? 'Loading'}</p>
+                <p className={'stats-info'}>{stat?.stat?.name}</p>
+                <p className={'stats-info'}>{stat?.base_stat}</p>
               </div>
             );
           })}
@@ -43,9 +43,11 @@ export default class Item extends React.Component<ItemProps, ItemState> {
                 className={type}
               />
             );
-          }) ?? 'loading'}
+          })}
         </div>
       </div>
+    ) : (
+      <Loader isBig={false} />
     );
   }
 }
