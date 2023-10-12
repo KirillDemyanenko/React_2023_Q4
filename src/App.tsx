@@ -24,7 +24,7 @@ export default class App extends React.Component<Props, State> {
   }
 
   async search(text = '') {
-    if (text === '') {
+    if (!text) {
       this.setState({ pokemons: await this.getData('?limit=20'), isLoading: false });
     } else {
       const allPokemons = await this.getData('?limit=2000');
