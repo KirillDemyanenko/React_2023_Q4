@@ -1,8 +1,8 @@
 import React from 'react';
-import { ItemProps, ItemState, PokemonInfo, TypesImages } from '../types';
-import { images } from '../images';
+import { ItemProps, ItemState, PokemonInfo, TypesImages } from '../../types';
+import { images } from '../../images';
 import { nanoid } from 'nanoid';
-import Loader from './Loader';
+import Loader from '../Loader/Loader';
 
 export default class Item extends React.Component<ItemProps, ItemState> {
   info: PokemonInfo = {} as PokemonInfo;

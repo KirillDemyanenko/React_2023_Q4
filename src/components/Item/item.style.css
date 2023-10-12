@@ -1,0 +1,166 @@
+.res {
+  width: 300px;
+  height: 421px;
+  display: flex;
+  flex-direction: column;
+  background: url('../../assets/card.webp') no-repeat;
+  background-size: contain;
+  border-radius: 10px;
+  position: relative;
+  margin: auto;
+  transition: transform 0.1s ease;
+}
+
+.res:hover {
+  transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+  scale: 0.9;
+}
+
+.res h4 {
+  font-size: 0.7rem;
+  font-style: italic;
+  text-transform: uppercase;
+  margin: 17px 105px 5px auto;
+  min-height: 20px;
+  display: flex;
+  overflow: scroll;
+  width: 120px;
+  align-items: center;
+}
+
+.res h4::-webkit-scrollbar {
+  display: none;
+}
+
+.res img {
+  min-height: 170px;
+  margin: 0 auto;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  padding: 0 70px;
+  margin-top: 10px;
+}
+
+.stats-info {
+  display: flex;
+  text-transform: capitalize;
+}
+
+.stats h5 {
+  text-transform: uppercase;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.icon {
+  border-radius: 100%;
+  height: 15px;
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  display: flex;
+  width: 64px;
+}
+
+.icon img {
+  min-height: 15px;
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+}
+
+.bug {
+  background-color: #92bc2c;
+  box-shadow: 0 0 20px #92bc2c;
+}
+
+.dark {
+  background-color: #595761;
+  box-shadow: 0 0 20px #595761;
+}
+
+.dragon {
+  background-color: #0c69c8;
+  box-shadow: 0 0 20px #0c69c8;
+}
+
+.electric {
+  background-color: #f2d94e;
+  box-shadow: 0 0 20px #f2d94e;
+}
+
+.fire {
+  background-color: #fba54c;
+  box-shadow: 0 0 20px #fba54c;
+}
+
+.fairy {
+  background-color: #ee90e6;
+  box-shadow: 0 0 20px #ee90e6;
+}
+
+.fighting {
+  background-color: #d3425f;
+  box-shadow: 0 0 20px #d3425f;
+}
+
+.flying {
+  background-color: #a1bbec;
+  box-shadow: 0 0 20px #a1bbec;
+}
+
+.ghost {
+  background-color: #5f6dbc;
+  box-shadow: 0 0 20px #5f6dbc;
+}
+
+.grass {
+  background-color: #5fbd58;
+  box-shadow: 0 0 20px #5fbd58;
+}
+
+.ground {
+  background-color: #da7c4d;
+  box-shadow: 0 0 20px #da7c4d;
+}
+
+.ice {
+  background-color: #75d0c1;
+  box-shadow: 0 0 20px #75d0c1;
+}
+
+.normal {
+  background-color: #a0a29f;
+  box-shadow: 0 0 20px #a0a29f;
+}
+
+.poison {
+  background-color: #b763cf;
+  box-shadow: 0 0 20px #b763cf;
+}
+
+.psychic {
+  background-color: #fa8581;
+  box-shadow: 0 0 20px #fa8581;
+}
+
+.rock {
+  background-color: #c9bb8a;
+  box-shadow: 0 0 20px #c9bb8a;
+}
+
+.steel {
+  background-color: #5695a3;
+  box-shadow: 0 0 20px #5695a3;
+}
+
+.water {
+  background-color: #539ddf;
+  box-shadow: 0 0 20px #539ddf;
+}

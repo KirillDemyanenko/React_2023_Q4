@@ -1,10 +1,12 @@
 import './App.css';
+import './components/Loader/loader.style.css';
+import './components/Item/item.style.css';
 import React from 'react';
 import { PokemonSearchInfo, Props, State } from './types';
 import Search from './components/Search';
-import Item from './components/Item';
+import Item from './components/Item/Item';
 import notFound from './assets/ditto.png';
-import Loader from './components/Loader';
+import Loader from './components/Loader/Loader';
 
 export default class App extends React.Component<Props, State> {
   constructor(props: Props) {
