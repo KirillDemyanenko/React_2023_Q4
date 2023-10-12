@@ -1,9 +1,10 @@
 import './App.css';
 import './components/Loader/loader.style.css';
 import './components/Item/item.style.css';
+import './components/Search/search.style.css';
 import React from 'react';
 import { PokemonSearchInfo, Props, State } from './types';
-import Search from './components/Search';
+import Search from './components/Search/Search';
 import Item from './components/Item/Item';
 import notFound from './assets/ditto.png';
 import Loader from './components/Loader/Loader';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchProps, SearchState } from '../types';
+import { SearchProps, SearchState } from '../../types';
 
 export default class Search extends React.Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
