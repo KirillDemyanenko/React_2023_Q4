@@ -5,6 +5,10 @@
   justify-content: center;
 }
 
+.wrapper {
+  position: relative;
+}
+
 input {
   min-width: 300px;
   padding: 5px 15px;
@@ -24,6 +28,18 @@ button {
 button:hover {
   cursor: pointer;
   background-color: var(--main-bg-color-hover);
+}
+
+.clear {
+  position: absolute;
+  font-size: 9px;
+  top: 7px;
+  right: 110px;
+  cursor: pointer;
+}
+
+.clear:hover {
+  scale: 1.1;
 }
 
 @media screen and (max-width: 1300px) {
@@ -50,5 +66,9 @@ button:hover {
 @media screen and (max-width: 470px) {
   input {
     min-width: 180px;
+  }
+
+  .clear {
+    right: 110px;
   }
 }
