@@ -41,6 +41,7 @@ export default class Item extends React.Component<ItemProps, ItemState> {
                 key={nanoid(5)}
                 alt={type}
                 className={type}
+                title={type}
               />
             );
           })}
