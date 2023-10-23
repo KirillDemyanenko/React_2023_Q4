@@ -5,6 +5,7 @@
   --main-bg-color: blue;
   --main-text-color: white;
   --main-bg-color-hover: darkblue;
+  --main-error-color: firebrick;
   border: none;
   user-select: none;
 }

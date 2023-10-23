@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 export type State = {
   pokemons: PokemonSearchInfo[];
   isLoading: boolean;
@@ -5,6 +7,7 @@ export type State = {
 
 export type SearchState = {
   text: string;
+  doError: boolean;
 };
 
 export type LoaderState = Record<string, never>;
@@ -34,6 +37,12 @@ export type PokemonsResponse = {
 
 export type LoaderProps = {
   isBig: boolean;
+};
+
+export type BoundaryProps = { children: ReactElement };
+
+export type BoundaryState = {
+  hasError: boolean;
 };
 
 export type ItemProps = {

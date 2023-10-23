@@ -30,6 +30,14 @@ button:hover {
   background-color: var(--main-bg-color-hover);
 }
 
+.make-error {
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 0 15px;
+  max-height: 26px;
+  background-color: var(--main-error-color);
+}
+
 .clear {
   position: absolute;
   font-size: 9px;

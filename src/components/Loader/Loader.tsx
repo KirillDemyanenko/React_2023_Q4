@@ -1,5 +1,6 @@
 import React from 'react';
 import { LoaderProps, LoaderState } from '../../types';
+import ComponentsErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 export default class Loader extends React.Component<LoaderProps, LoaderState> {
   constructor(props: LoaderProps) {
@@ -7,14 +8,18 @@ export default class Loader extends React.Component<LoaderProps, LoaderState> {
   }
   render() {
     return this.props.isBig ? (
-      <div className="loader"></div>
+      <ComponentsErrorBoundary>
+        <div className="loader"></div>
+      </ComponentsErrorBoundary>
     ) : (
-      <div className="lds-ellipsis">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+      <ComponentsErrorBoundary>
+        <div className="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </ComponentsErrorBoundary>
     );
   }
 }
