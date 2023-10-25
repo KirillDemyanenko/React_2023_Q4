@@ -69,14 +69,25 @@ button:hover {
   .search {
     grid-column: 1 / 2;
   }
+  input {
+    min-width: 140px;
+  }
 }
 
 @media screen and (max-width: 470px) {
+  .search {
+    flex-direction: column;
+  }
+
   input {
     min-width: 180px;
   }
 
   .clear {
-    right: 110px;
+    right: 165px;
+  }
+
+  .make-error {
+    margin: 15px auto 0 auto;
   }
 }

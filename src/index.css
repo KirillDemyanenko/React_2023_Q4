@@ -61,7 +61,7 @@
 
 @media screen and (max-width: 470px) {
   #root {
-    grid-template-rows: 50px repeat(20, 1fr);
+    grid-template-rows: 80px repeat(20, 1fr);
     padding: 32px 10px;
   }
 }
