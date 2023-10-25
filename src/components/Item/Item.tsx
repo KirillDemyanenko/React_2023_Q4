@@ -17,6 +17,7 @@ export default class Item extends React.Component<ItemProps, ItemState> {
   }
 
   render() {
+    if (this.props.doError) throw new Error('Oops! I Did It Again...');
     return this.state.isLoad ? (
       <div className={`res ${this.info?.types?.at(0)?.type?.name ?? ''}`} key={this.props.id}>
         <h4>{this.props.pokemonInfo.name}</h4>

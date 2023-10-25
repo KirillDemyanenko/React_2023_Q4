@@ -13,7 +13,7 @@ export default class ComponentsErrorBoundary extends React.Component<BoundaryPro
   }
 
   handleClick(): void {
-    this.setState({ hasError: false });
+    this.props.updateMethod(localStorage.getItem('pokedexSearch') ?? '', false);
   }
 
   componentDidCatch(error: Error) {
@@ -24,10 +24,8 @@ export default class ComponentsErrorBoundary extends React.Component<BoundaryPro
     if (this.state.hasError) {
       return (
         <div className="error">
-          <h3>Everything went to hell. Let&apos;s go our separate ways.</h3>
-          <button onClick={this.handleClick}>
-            React, brother, make everything beautiful as it was. I ask you brotherly...
-          </button>
+          <h3>Something was wrong.</h3>
+          <button onClick={this.handleClick}>Fix please...</button>
         </div>
       );
     }

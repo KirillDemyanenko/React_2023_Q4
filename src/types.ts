@@ -3,17 +3,17 @@ import { ReactElement } from 'react';
 export type State = {
   pokemons: PokemonSearchInfo[];
   isLoading: boolean;
+  doError: boolean;
 };
 
 export type SearchState = {
   text: string;
-  doError: boolean;
 };
 
 export type LoaderState = Record<string, never>;
 
 export type SearchProps = {
-  searchMethod: (text: string) => void;
+  searchMethod: (text: string, doErrors: boolean) => void;
 };
 
 export type ItemState = {
@@ -39,7 +39,10 @@ export type LoaderProps = {
   isBig: boolean;
 };
 
-export type BoundaryProps = { children: ReactElement };
+export type BoundaryProps = {
+  children: ReactElement;
+  updateMethod: (text: string, doErrors: boolean) => void;
+};
 
 export type BoundaryState = {
   hasError: boolean;
@@ -49,6 +52,7 @@ export type ItemProps = {
   pokemonInfo: PokemonSearchInfo;
   key: string;
   id: string;
+  doError: boolean;
 };
 
 export type Ability = {

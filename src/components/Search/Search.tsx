@@ -7,21 +7,21 @@ export default class Search extends React.Component<SearchProps, SearchState> {
     this.handleClick = this.handleClick.bind(this);
     this.makeError = this.makeError.bind(this);
     this.clearInput = this.clearInput.bind(this);
-    this.state = { text: '', doError: false };
+    this.state = { text: '' };
   }
 
   componentDidMount() {
     const savedText = localStorage.getItem('pokedexSearch') ?? '';
     this.setState({ text: savedText });
-    this.props.searchMethod(savedText);
+    this.props.searchMethod(savedText, false);
   }
 
   makeError() {
-    this.setState({ text: this.state.text, doError: true });
+    this.props.searchMethod(this.state.text, true);
   }
 
   handleClick(): void {
-    this.props.searchMethod(this.state.text);
+    this.props.searchMethod(this.state.text, false);
   }
 
   saveToStorage(text: string) {
@@ -31,11 +31,10 @@ export default class Search extends React.Component<SearchProps, SearchState> {
 
   clearInput() {
     this.saveToStorage('');
-    this.props.searchMethod('');
+    this.props.searchMethod('', false);
   }
 
   render() {
-    if (this.state.doError) throw new Error('Oops! I Did It Again...');
     return (
       <>
         <div className="search">

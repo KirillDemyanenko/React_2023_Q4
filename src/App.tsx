@@ -10,38 +10,46 @@ import Item from './components/Item/Item';
 import notFound from './assets/ditto.png';
 import Loader from './components/Loader/Loader';
 import ComponentsErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import { nanoid } from 'nanoid';
 
 export default class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { pokemons: [], isLoading: true };
+    this.state = { pokemons: [], isLoading: true, doError: false };
     this.search = this.search.bind(this);
   }
 
+  decideIsError() {
+    return Math.floor(Math.random() * (10 - 1)) + 1 === 5 && this.state.doError;
+  }
+
   async getData(additional: string): Promise<PokemonSearchInfo[]> {
-    this.setState({ pokemons: [], isLoading: true });
+    this.setState({ pokemons: [], isLoading: true, doError: this.state.doError });
     return await fetch('https://pokeapi.co/api/v2/pokemon'.concat(additional))
       .then((data) => data.json())
       .then((res) => res.results);
   }
 
-  async search(text = '') {
+  async search(text = '', canMakeError = false) {
     if (!text) {
-      this.setState({ pokemons: await this.getData('?limit=20'), isLoading: false });
+      this.setState({
+        pokemons: await this.getData('?limit=20'),
+        isLoading: false,
+        doError: canMakeError,
+      });
     } else {
       const allPokemons = await this.getData('?limit=2000');
       this.setState({
         pokemons: allPokemons.filter((el) => el.name.toLowerCase().includes(text.toLowerCase())),
         isLoading: false,
+        doError: canMakeError,
       });
     }
   }
   render() {
     return (
       <>
-        <ComponentsErrorBoundary>
-          <Search searchMethod={this.search} />
-        </ComponentsErrorBoundary>
+        <Search searchMethod={this.search} />
         {this.state.isLoading ? (
           <Loader isBig={true} />
         ) : (
@@ -53,7 +61,16 @@ export default class App extends React.Component<Props, State> {
               </div>
             ) : (
               this.state.pokemons.map((el) => {
-                return <Item pokemonInfo={el} key={el.name} id={el.name} />;
+                return (
+                  <ComponentsErrorBoundary updateMethod={this.search} key={nanoid(5)}>
+                    <Item
+                      pokemonInfo={el}
+                      key={el.name}
+                      id={el.name}
+                      doError={this.decideIsError()}
+                    />
+                  </ComponentsErrorBoundary>
+                );
               })
             )}
           </>
