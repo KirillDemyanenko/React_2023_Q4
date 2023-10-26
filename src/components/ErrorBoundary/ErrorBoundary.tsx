@@ -1,7 +1,10 @@
 import React from 'react';
 import { BoundaryProps, BoundaryState } from '../../types';
 
-export default class ComponentsErrorBoundary extends React.Component<BoundaryProps, BoundaryState> {
+export default class ComponentsErrorBoundary extends React.PureComponent<
+  BoundaryProps,
+  BoundaryState
+> {
   constructor(props: BoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -17,7 +20,7 @@ export default class ComponentsErrorBoundary extends React.Component<BoundaryPro
   }
 
   componentDidCatch(error: Error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 
   render() {

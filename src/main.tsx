@@ -5,6 +5,7 @@ import './index.css';
 
 window.addEventListener('error', (ev) => {
   ev.preventDefault();
+  console.error('Render error ', ev.error.message);
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

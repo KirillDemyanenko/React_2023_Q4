@@ -4,7 +4,7 @@ import { images } from '../../images';
 import { nanoid } from 'nanoid';
 import Loader from '../Loader/Loader';
 
-export default class Item extends React.Component<ItemProps, ItemState> {
+export default class Item extends React.PureComponent<ItemProps, ItemState> {
   info: PokemonInfo = {} as PokemonInfo;
   constructor(props: ItemProps) {
     super(props);

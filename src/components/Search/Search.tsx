@@ -1,7 +1,7 @@
 import React from 'react';
 import { SearchProps, SearchState } from '../../types';
 
-export default class Search extends React.Component<SearchProps, SearchState> {
+export default class Search extends React.PureComponent<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
     this.handleClick = this.handleClick.bind(this);

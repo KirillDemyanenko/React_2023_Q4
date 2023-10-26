@@ -12,7 +12,7 @@ import Loader from './components/Loader/Loader';
 import ComponentsErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { nanoid } from 'nanoid';
 
-export default class App extends React.Component<Props, State> {
+export default class App extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { pokemons: [], isLoading: true, doError: false };
@@ -27,18 +27,20 @@ export default class App extends React.Component<Props, State> {
     this.setState({ pokemons: [], isLoading: true, doError: this.state.doError });
     return await fetch('https://pokeapi.co/api/v2/pokemon'.concat(additional))
       .then((data) => data.json())
-      .then((res) => res.results);
+      .then((res) => res.results)
+      .catch((err) => console.error(err));
   }
 
   async search(text = '', canMakeError = false) {
     if (!text) {
       this.setState({
-        pokemons: await this.getData('?limit=20'),
+        pokemons: (await this.getData('?limit=20').catch((err) => console.error(err))) ?? [],
         isLoading: false,
         doError: canMakeError,
       });
     } else {
-      const allPokemons = await this.getData('?limit=2000');
+      const allPokemons =
+        (await this.getData('?limit=2000').catch((err) => console.error(err))) ?? [];
       this.setState({
         pokemons: allPokemons.filter((el) => el.name.toLowerCase().includes(text.toLowerCase())),
         isLoading: false,
@@ -47,35 +49,39 @@ export default class App extends React.Component<Props, State> {
     }
   }
   render() {
-    return (
-      <>
-        <Search searchMethod={this.search} />
-        {this.state.isLoading ? (
-          <Loader isBig={true} />
-        ) : (
-          <>
-            {this.state.pokemons.length === 0 ? (
-              <div className={'not-found'}>
-                <img src={notFound} alt="not found" />
-                <h3>Nothing was found...</h3>
-              </div>
-            ) : (
-              this.state.pokemons.map((el) => {
-                return (
-                  <ComponentsErrorBoundary updateMethod={this.search} key={nanoid(5)}>
-                    <Item
-                      pokemonInfo={el}
-                      key={el.name}
-                      id={el.name}
-                      doError={this.decideIsError()}
-                    />
-                  </ComponentsErrorBoundary>
-                );
-              })
-            )}
-          </>
-        )}
-      </>
-    );
+    try {
+      return (
+        <>
+          <Search searchMethod={this.search} />
+          {this.state.isLoading ? (
+            <Loader isBig={true} />
+          ) : (
+            <>
+              {this.state.pokemons.length === 0 ? (
+                <div className={'not-found'}>
+                  <img src={notFound} alt="not found" />
+                  <h3>Nothing was found...</h3>
+                </div>
+              ) : (
+                this.state.pokemons.map((el) => {
+                  return (
+                    <ComponentsErrorBoundary updateMethod={this.search} key={nanoid(5)}>
+                      <Item
+                        pokemonInfo={el}
+                        key={el.name}
+                        id={el.name}
+                        doError={this.decideIsError()}
+                      />
+                    </ComponentsErrorBoundary>
+                  );
+                })
+              )}
+            </>
+          )}
+        </>
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
