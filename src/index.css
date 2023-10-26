@@ -13,7 +13,7 @@
 #root {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 50px repeat(4, 1fr);
+  grid-template-rows: 50px repeat(2, 1fr);
   grid-gap: 10px;
   min-height: 100vh;
 }
@@ -25,7 +25,6 @@
 @media screen and (max-width: 1300px) {
   #root {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 50px repeat(7, 1fr);
     padding: 32px 20px;
   }
 
@@ -37,7 +36,6 @@
 @media screen and (max-width: 980px) {
   #root {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 50px repeat(10, 1fr);
     padding: 32px 15px;
   }
 
@@ -49,7 +47,6 @@
 @media screen and (max-width: 660px) {
   #root {
     grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: 50px repeat(20, 1fr);
     padding: 32px 15px;
   }
 
@@ -61,7 +58,7 @@
 
 @media screen and (max-width: 470px) {
   #root {
-    grid-template-rows: 80px repeat(20, 1fr);
+    grid-template-rows: 80px repeat(2, 1fr);
     padding: 32px 10px;
   }
 }
