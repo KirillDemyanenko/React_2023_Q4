@@ -1,21 +1,16 @@
 import React from 'react';
-import { LoaderProps, LoaderState } from '../../types';
+import { LoaderProps } from '../../types';
 
-export default class Loader extends React.PureComponent<LoaderProps, LoaderState> {
-  constructor(props: LoaderProps) {
-    super(props);
-  }
-
-  render() {
-    return this.props.isBig ? (
-      <div className="loader"></div>
-    ) : (
-      <div className="lds-ellipsis">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    );
-  }
+export default function Loader(props: LoaderProps) {
+  const { isBig } = props;
+  return isBig ? (
+    <div className="loader" />
+  ) : (
+    <div className="lds-ellipsis">
+      <div />
+      <div />
+      <div />
+      <div />
+    </div>
+  );
 }
