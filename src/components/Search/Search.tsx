@@ -38,7 +38,7 @@ export default function Search(props: SearchProps) {
           onChange={(event) => saveToStorage(event.target.value)}
           placeholder="Type something..."
         />
-        {text ? (
+        {text && (
           <div
             tabIndex={0}
             role="button"
@@ -48,8 +48,6 @@ export default function Search(props: SearchProps) {
           >
             ❌
           </div>
-        ) : (
-          ''
         )}
         <button type="button" onClick={handleClick}>
           search
