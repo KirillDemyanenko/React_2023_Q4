@@ -4,13 +4,13 @@ import './components/Item/item.style.css';
 import './components/Search/search.style.css';
 import './components/ErrorBoundary/error.style.css';
 import React from 'react';
-import { PokemonSearchInfo, Props, State } from './types';
+import { nanoid } from 'nanoid';
+import type { PokemonSearchInfo, Props, State } from './types';
 import Search from './components/Search/Search';
 import Item from './components/Item/Item';
 import notFound from './assets/ditto.png';
 import Loader from './components/Loader/Loader';
 import ComponentsErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
-import { nanoid } from 'nanoid';
 
 export default class App extends React.PureComponent<Props, State> {
   constructor(props: Props) {
@@ -19,16 +19,17 @@ export default class App extends React.PureComponent<Props, State> {
     this.search = this.search.bind(this);
   }
 
-  decideIsError() {
-    return Math.floor(Math.random() * (10 - 1)) + 1 === 5 && this.state.doError;
-  }
-
   async getData(additional: string): Promise<PokemonSearchInfo[]> {
-    this.setState({ pokemons: [], isLoading: true, doError: this.state.doError });
-    return await fetch('https://pokeapi.co/api/v2/pokemon'.concat(additional))
+    this.setState((prevState) => ({ pokemons: [], isLoading: true, doError: prevState.doError }));
+    return fetch('https://pokeapi.co/api/v2/pokemon'.concat(additional))
       .then((data) => data.json())
       .then((res) => res.results)
       .catch((err) => console.error(err));
+  }
+
+  decideIsError() {
+    const { doError } = this.state;
+    return Math.floor(Math.random() * (10 - 1)) + 1 === 5 && doError;
   }
 
   async search(text = '', canMakeError = false) {
@@ -48,40 +49,38 @@ export default class App extends React.PureComponent<Props, State> {
       });
     }
   }
+
   render() {
-    try {
-      return (
-        <>
-          <Search searchMethod={this.search} />
-          {this.state.isLoading ? (
-            <Loader isBig={true} />
-          ) : (
-            <>
-              {this.state.pokemons.length === 0 ? (
-                <div className={'not-found'}>
-                  <img src={notFound} alt="not found" />
-                  <h3>Nothing was found...</h3>
-                </div>
-              ) : (
-                this.state.pokemons.map((el) => {
-                  return (
-                    <ComponentsErrorBoundary updateMethod={this.search} key={nanoid(5)}>
-                      <Item
-                        pokemonInfo={el}
-                        key={el.name}
-                        id={el.name}
-                        doError={this.decideIsError()}
-                      />
-                    </ComponentsErrorBoundary>
-                  );
-                })
-              )}
-            </>
-          )}
-        </>
-      );
-    } catch (err) {
-      console.error(err);
-    }
+    const { pokemons, isLoading } = this.state;
+    return (
+      <>
+        <Search searchMethod={this.search} />
+        {isLoading ? (
+          <Loader isBig />
+        ) : (
+          <>
+            {pokemons.length === 0 ? (
+              <div className="not-found">
+                <img src={notFound} alt="not found" />
+                <h3>Nothing was found...</h3>
+              </div>
+            ) : (
+              pokemons.map((el) => {
+                return (
+                  <ComponentsErrorBoundary updateMethod={this.search} key={nanoid(5)}>
+                    <Item
+                      pokemonInfo={el}
+                      key={el.name}
+                      id={el.name}
+                      doError={this.decideIsError()}
+                    />
+                  </ComponentsErrorBoundary>
+                );
+              })
+            )}
+          </>
+        )}
+      </>
+    );
   }
 }
