@@ -1,64 +1,63 @@
-import React from 'react';
-import { SearchProps, SearchState } from '../../types';
+import React, { useEffect, useState } from 'react';
+import { SearchProps } from '../../types';
 
-export default class Search extends React.PureComponent<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-    this.makeError = this.makeError.bind(this);
-    this.clearInput = this.clearInput.bind(this);
-    this.state = { text: '' };
-  }
+export default function Search(props: SearchProps) {
+  const [text, setText] = useState('');
+  const { searchMethod } = props;
 
-  componentDidMount() {
+  useEffect(() => {
     const savedText = localStorage.getItem('pokedexSearch') ?? '';
-    this.setState({ text: savedText });
-    this.props.searchMethod(savedText, false);
-  }
+    setText(savedText);
+    searchMethod(savedText, false);
+  }, [searchMethod]);
 
-  makeError() {
-    this.props.searchMethod(this.state.text, true);
-  }
+  const handleClick = (): void => {
+    searchMethod(text, false);
+  };
 
-  handleClick(): void {
-    this.props.searchMethod(this.state.text, false);
-  }
+  const makeError = () => {
+    searchMethod(text, true);
+  };
 
-  saveToStorage(text: string) {
-    this.setState({ text: text });
-    localStorage.setItem('pokedexSearch', text);
-  }
+  const saveToStorage = (textForStorageSave: string) => {
+    setText(textForStorageSave);
+    localStorage.setItem('pokedexSearch', textForStorageSave);
+  };
 
-  clearInput() {
-    this.saveToStorage('');
-    this.props.searchMethod('', false);
-  }
+  const clearInput = () => {
+    saveToStorage('');
+    searchMethod('', false);
+  };
 
-  render() {
-    return (
-      <>
-        <div className="search">
-          <div className="wrapper">
-            <input
-              type="text"
-              value={this.state.text}
-              onChange={(event) => this.saveToStorage(event.target.value)}
-              placeholder={'Type something...'}
-            />
-            {this.state.text ? (
-              <div className="clear" onClick={this.clearInput}>
-                ❌
-              </div>
-            ) : (
-              <></>
-            )}
-            <button onClick={this.handleClick}>search</button>
+  return (
+    <div className="search">
+      <div className="wrapper">
+        <input
+          type="text"
+          value={text}
+          onChange={(event) => saveToStorage(event.target.value)}
+          placeholder="Type something..."
+        />
+        {text ? (
+          <div
+            tabIndex={0}
+            role="button"
+            onKeyDown={clearInput}
+            className="clear"
+            onClick={clearInput}
+          >
+            ❌
           </div>
-          <button className="make-error" onClick={this.makeError}>
-            Make error
-          </button>
-        </div>
-      </>
-    );
-  }
+        ) : (
+          ''
+        )}
+        <button type="button" onClick={handleClick}>
+          search
+        </button>
+      </div>
+      <button type="button" className="make-error" onClick={makeError}>
+        Make error
+      </button>
+    </div>
+  );
 }
