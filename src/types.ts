@@ -10,11 +10,6 @@ export type SearchProps = {
   searchMethod: (text: string, doErrors: boolean) => void;
 };
 
-export type ItemState = {
-  isLoad: boolean;
-  imgURL: string;
-};
-
 export type Props = NonNullable<unknown>;
 
 export type PokemonSearchInfo = {
@@ -221,6 +216,12 @@ export type PokemonInfo = {
   stats: Stats[];
   types: Types[];
   weight: number;
+};
+
+export type ItemState = {
+  isLoad: boolean;
+  imgURL: string;
+  info: PokemonInfo;
 };
 
 export type TypesImages = {
