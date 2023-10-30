@@ -6,28 +6,24 @@ import Loader from '../Loader/Loader';
 
 export default function Item(props: ItemProps) {
   const { pokemonInfo, id, doError } = props;
-  if (doError) throw new Error('Oops! I Did It Again...');
-  const [info, setInfo] = useState({} as PokemonInfo);
-  const [isLoad, setIsLoad] = useState(false);
-  const [imgURL, setImgURL] = useState('');
+  if (doError) throw new Error('Oops! I Did `It Again...');
+  const [state, setItemState] = useState({ isLoad: false, info: {} as PokemonInfo, imgURL: '' });
 
   useEffect(() => {
     async function fetchData() {
-      setInfo(await fetch(pokemonInfo.url).then((data) => data.json()));
+      const infoData = (await fetch(pokemonInfo.url).then((data) => data.json())) as PokemonInfo;
+      setItemState({ isLoad: true, info: infoData, imgURL: infoData.sprites.front_default ?? '' });
     }
-    fetchData().then(() => {
-      setIsLoad(true);
-      setImgURL(info.sprites.front_default ?? '');
-    });
-  }, [pokemonInfo, info]);
+    fetchData().catch((err) => console.error(err));
+  }, [pokemonInfo, state]);
 
-  return isLoad ? (
-    <div className={`res ${info?.types?.at(0)?.type?.name ?? ''}`} key={id}>
+  return state.isLoad ? (
+    <div className={`res ${state.info?.types?.at(0)?.type?.name ?? ''}`} key={id}>
       <h4>{pokemonInfo.name}</h4>
-      <img src={imgURL} alt="img" />
+      <img src={state.imgURL} alt="img" />
       <div className="stats">
         <h5>Stats</h5>
-        {info?.stats?.map((stat) => {
+        {state.info?.stats?.map((stat) => {
           return (
             <div className="stats-row" key={`stat-${stat.stat.name}`}>
               <p className="stats-info">{stat?.stat?.name}</p>
@@ -37,7 +33,7 @@ export default function Item(props: ItemProps) {
         })}
       </div>
       <div className="icon">
-        {info?.types?.map((val) => {
+        {state.info?.types?.map((val) => {
           const type = val.type.name;
           return (
             <img
