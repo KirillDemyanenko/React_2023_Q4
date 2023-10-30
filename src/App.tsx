@@ -53,13 +53,9 @@ export default function App() {
     [getData]
   );
 
-  const doInitSearch = useCallback(() => {
+  useEffect(() => {
     search(localStorage.getItem('pokedexSearch') ?? '').catch((err) => console.error(err));
   }, [search]);
-
-  useEffect(() => {
-    doInitSearch();
-  }, [doInitSearch]);
 
   return (
     <>
