@@ -8,8 +8,7 @@ export default function Search(props: SearchProps) {
   useEffect(() => {
     const savedText = localStorage.getItem('pokedexSearch') ?? '';
     setText(savedText);
-    searchMethod(savedText, false);
-  }, [searchMethod]);
+  }, []);
 
   const handleClick = (): void => {
     searchMethod(text, false);
