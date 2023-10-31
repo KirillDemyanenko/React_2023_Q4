@@ -42,7 +42,7 @@ export default class Search extends React.PureComponent<SearchProps, SearchState
             <input
               type="text"
               value={this.state.text}
-              onChange={(event) => this.saveToStorage(event.target.value)}
+              onChange={(event) => this.saveToStorage(event.target.value.trim())}
               placeholder={'Type something...'}
             />
             {this.state.text ? (
