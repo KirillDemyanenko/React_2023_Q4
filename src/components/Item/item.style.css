@@ -42,6 +42,7 @@
   flex-direction: column;
   padding: 0 70px;
   margin-top: 10px;
+  font-size: 0.8rem;
 }
 
 .stats-info {
