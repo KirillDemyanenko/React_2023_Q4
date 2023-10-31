@@ -34,7 +34,7 @@ export default function Search(props: SearchProps) {
         <input
           type="text"
           value={text}
-          onChange={(event) => saveToStorage(event.target.value)}
+          onChange={(event) => saveToStorage(event.target.value.trim())}
           placeholder="Type something..."
         />
         {text && (
