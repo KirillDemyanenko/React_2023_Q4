@@ -1,15 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { PaginationProps } from '../../types';
 import styles from './pagination.module.css';
 
 export default function Pagination(props: PaginationProps) {
-  const { elementsPerPage, totalElements } = props;
-  const [elOnPage, setElOnPage] = useState(elementsPerPage);
+  const { elementsPerPage, totalElements, changeCount } = props;
+  const [elOnPage] = useState(elementsPerPage);
+  const [searchParams] = useSearchParams();
+  const [state, setState] = useState({ limit: '20', search: '', page: '0' });
 
-  const changeState = (ev) => {
+  // const readSearchParameters = useCallback(() => {
+  //   const limit = searchParams.get('limit') ?? '20';
+  //   const search = searchParams.get('search') ?? '';
+  //   const page = searchParams.get('page') ?? '0';
+  //   return [search, limit, page];
+  // }, [searchParams]);
+
+  useEffect(() => {
+    const limit = searchParams.get('limit') ?? '20';
+    const search = searchParams.get('search') ?? '';
+    const page = searchParams.get('page') ?? '0';
+    setState({ limit, search, page });
+  }, [searchParams]);
+
+  const changeState = (ev: Event) => {
     const target = ev.target as HTMLSelectElement;
-    setElOnPage(parseInt(target.value, 10));
+    changeCount(0, parseInt(target?.value, 10), state.search);
+  };
+
+  const changePage = (ev: Event) => {
+    const target = ev.target as HTMLSpanElement;
+    changeCount(parseInt(target.innerText, 10) - 1, parseInt(state.limit, 10), state.search);
   };
 
   return (
@@ -18,15 +40,29 @@ export default function Pagination(props: PaginationProps) {
         <div className={styles.pages}>
           <div className={styles.arrowLeft}>&laquo;</div>
           {Math.ceil(totalElements / elOnPage) <= 6 ? (
-            [...Array(6)].map((_, index) => (
-              <span className={styles.num} key={nanoid(5)}>
+            [...Array(Math.ceil(totalElements / elOnPage))].map((_, index) => (
+              <span
+                role="button"
+                tabIndex={0}
+                onKeyDown={changePage}
+                onClick={changePage}
+                className={state.page === (index + 1).toString() ? styles.selected : styles.num}
+                key={nanoid(5)}
+              >
                 {index + 1}
               </span>
             ))
           ) : (
             <>
               {[...Array.from(Array(3).keys())].map((el) => (
-                <span className={styles.num} key={nanoid(5)}>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={changePage}
+                  onClick={changePage}
+                  className={state.page === (el + 1).toString() ? styles.selected : styles.num}
+                  key={nanoid(5)}
+                >
                   {el + 1}
                 </span>
               ))}
@@ -37,7 +73,14 @@ export default function Pagination(props: PaginationProps) {
               {[...Array.from(Array(Math.ceil(totalElements / elOnPage)).keys())]
                 .splice(Math.ceil(totalElements / elOnPage) - 3)
                 .map((el) => (
-                  <span className={styles.num} key={nanoid(5)}>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={changePage}
+                    onClick={changePage}
+                    className={state.page === (el + 1).toString() ? styles.selected : styles.num}
+                    key={nanoid(5)}
+                  >
                     {el + 1}
                   </span>
                 ))}
@@ -46,8 +89,8 @@ export default function Pagination(props: PaginationProps) {
           <div className={styles.arrowRight}>&raquo;</div>
         </div>
         <div className={styles.info}>
-          <p> Total results: {totalElements}</p>
-          <label htmlFor="perPage">
+          <p className={styles.bottom_info}> Total results: {totalElements}</p>
+          <label className={styles.bottom_info} htmlFor="perPage">
             Element per page
             <select name="perPage" id="perPage" defaultValue={elOnPage} onChange={changeState}>
               <option value="" disabled>

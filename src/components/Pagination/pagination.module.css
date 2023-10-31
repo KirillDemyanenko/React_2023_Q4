@@ -28,13 +28,11 @@
   color: var(--main-bg-color);
 }
 
-p {
-  display: flex;
-}
-
-input {
-  width: 30px;
+select {
+  width: 50px;
   border-radius: 10px;
+  margin: auto 1rem;
+  cursor: pointer;
 }
 
 .pages,
@@ -43,6 +41,10 @@ input {
   width: 100%;
   align-items: center;
   justify-content: center;
+}
+
+.info {
+  gap: 4rem;
 }
 
 .num {
@@ -54,6 +56,33 @@ input {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  cursor: pointer;
+}
+
+.num:hover {
+  border: none;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  border-radius: 50%;
+}
+
+.selected {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 2px;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.bottom_info {
+  display: flex;
+  font-weight: 700;
+  margin-bottom: 0;
 }
 
 @media screen and (max-width: 1300px) {

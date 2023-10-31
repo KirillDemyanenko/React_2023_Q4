@@ -248,5 +248,5 @@ export type TypesImages = {
 export type PaginationProps = {
   elementsPerPage: number;
   totalElements: number;
-  changeCount: (count: number) => void;
+  changeCount: (page: number, limit: number, search: string) => void;
 };
