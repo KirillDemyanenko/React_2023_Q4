@@ -1,0 +1,25 @@
+.errorPage {
+  grid-column: 1 / 5;
+  grid-row: 1 / 4;
+  margin: auto;
+}
+
+p {
+  margin-bottom: 5px;
+}
+
+a {
+  margin-top: 20px;
+  display: block;
+  text-decoration: none;
+  padding: 5px 20px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+}
+
+a:hover {
+  cursor: pointer;
+  background-color: var(--main-bg-color-hover);
+}
