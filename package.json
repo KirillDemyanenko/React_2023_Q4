@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "prettier": "npx prettier . --write",
-    "deploy": "tsc && vite build && netlify deploy --prod"
+    "deploy": "tsc && vite build && netlify deploy --prod",
+    "prepare": "husky install"
   },
   "dependencies": {
     "react": "^18.2.0",
