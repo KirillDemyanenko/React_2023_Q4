@@ -11,6 +11,7 @@ import Item from './components/Item/Item';
 import notFound from './assets/ditto.png';
 import Loader from './components/Loader/Loader';
 import ComponentsErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import Pagination from './components/Pagination/Pagination';
 
 export default function App() {
   const [state, setAppState] = useState({
@@ -80,6 +81,7 @@ export default function App() {
           )}
         </>
       )}
+      <Pagination totalElements={1200} elementsPerPage={20} />
     </>
   );
 }

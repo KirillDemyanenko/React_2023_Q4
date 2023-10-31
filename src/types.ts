@@ -244,3 +244,8 @@ export type TypesImages = {
   rock: string;
   steel: string;
 };
+
+export type PaginationProps = {
+  elementsPerPage: number;
+  totalElements: number;
+};
