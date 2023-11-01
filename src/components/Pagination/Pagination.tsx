@@ -10,28 +10,21 @@ export default function Pagination(props: PaginationProps) {
   const [searchParams] = useSearchParams();
   const [state, setState] = useState({ limit: '20', search: '', page: '0' });
 
-  // const readSearchParameters = useCallback(() => {
-  //   const limit = searchParams.get('limit') ?? '20';
-  //   const search = searchParams.get('search') ?? '';
-  //   const page = searchParams.get('page') ?? '0';
-  //   return [search, limit, page];
-  // }, [searchParams]);
-
   useEffect(() => {
     const limit = searchParams.get('limit') ?? '20';
     const search = searchParams.get('search') ?? '';
-    const page = searchParams.get('page') ?? '0';
+    const page = searchParams.get('page') ?? '1';
     setState({ limit, search, page });
   }, [searchParams]);
 
   const changeState = (ev: Event) => {
     const target = ev.target as HTMLSelectElement;
-    changeCount(0, parseInt(target?.value, 10), state.search);
+    changeCount(1, parseInt(target?.value, 10), state.search);
   };
 
   const changePage = (ev: Event) => {
     const target = ev.target as HTMLSpanElement;
-    changeCount(parseInt(target.innerText, 10) - 1, parseInt(state.limit, 10), state.search);
+    changeCount(parseInt(target.innerText, 10), parseInt(state.limit, 10), state.search);
   };
 
   return (
@@ -70,7 +63,7 @@ export default function Pagination(props: PaginationProps) {
                 {' '}
                 ...{' '}
               </span>
-              {[...Array.from(Array(Math.ceil(totalElements / elOnPage)).keys())]
+              {[...Array.from(Array(Math.ceil(totalElements / Number(state.limit))).keys())]
                 .splice(Math.ceil(totalElements / elOnPage) - 3)
                 .map((el) => (
                   <span

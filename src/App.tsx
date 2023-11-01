@@ -17,98 +17,107 @@ import Pagination from './components/Pagination/Pagination';
 export default function App() {
   const [state, setAppState] = useState({
     pokemons: [] as PokemonSearchInfo[],
-    isLoading: true,
-    doError: false,
   });
+  const [doError, setDoError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [pokemonsCount, setPokemonsCount] = useState(0);
-  const [pokemonsPerPage, setPokemonsPerPage] = useState(20);
   const [searchParams, setSearchParams] = useSearchParams();
 
+  /**
+   * Set new query params
+   * @param {number=} [page=1] Page number.
+   * @param {number} [limit=20] Items per page.
+   * @param {string} [search=''] Search text.
+   */
   const changeSearchParameters = useCallback(
-    (page = 0, limit = 20, search = '') => {
-      const query: string[][] = [];
-      if (page > -1) query.push(['page', (page + 1).toString()]);
-      if (limit > 0) query.push(['limit', limit.toString()]);
+    (page = 1, limit = 20, search = '') => {
+      const query: string[][] = [
+        ['page', page.toString()],
+        ['limit', limit.toString()],
+      ];
       if (search) query.push(['search', search]);
       setSearchParams(new URLSearchParams(query));
-      setPokemonsPerPage(limit);
     },
     [setSearchParams]
   );
 
+  /**
+   * Returns query params
+   * @returns {[limit: number, page: number, search: string]}
+   */
   const readSearchParameters = useCallback(() => {
-    const limit = searchParams.get('limit') ?? '20';
-    const search = searchParams.get('search') ?? '';
-    const page = searchParams.get('page') ?? '0';
-    return [limit, page, search];
+    return [
+      parseInt(searchParams.get('limit') || '20', 10),
+      parseInt(searchParams.get('page') || '1', 10),
+      searchParams.get('search') || '',
+    ];
   }, [searchParams]);
 
-  const getData = useCallback(
-    async (additional: string): Promise<PokemonSearchInfo[]> => {
-      setAppState({ pokemons: [], isLoading: true, doError: state.doError });
-      return fetch('https://pokeapi.co/api/v2/pokemon'.concat(additional))
-        .then((data) => data.json())
-        .then((res: PokemonsResponse) => {
-          setPokemonsCount(res.count);
-          return res.results;
-        });
-    },
-    [state.doError, setAppState]
-  );
-
-  const decideIsError = () => {
-    return Math.floor(Math.random() * (10 - 1)) + 1 === 5 && state.doError;
+  /**
+   * @returns {boolean} Return random boolean value if we need throw error
+   */
+  const decideIsError = (): boolean => {
+    return Math.floor(Math.random() * (10 - 1)) + 1 === 5 && doError;
   };
+
+  /**
+   * Fetch data from API and set in state number of elements found.
+   * Without params return all records.
+   * @param {number} [offset=0] Quantity skipped records
+   * @param {limit} [limit=1292] Quantity items in response
+   * @returns {Promise<PokemonSearchInfo[]>} Return array of Pokémon Promise
+   */
+  const getData = useCallback(async (offset = 0, limit = 1292): Promise<PokemonSearchInfo[]> => {
+    return fetch(import.meta.env.VITE_API_URL.concat(`?offset=${offset}&limit=${limit}`))
+      .then((data) => data.json())
+      .then((res: PokemonsResponse) => {
+        setPokemonsCount(res.count);
+        return res.results;
+      });
+  }, []);
 
   const search = useCallback(
     async (text = '', canMakeError = false) => {
+      setIsLoading(true);
+      setDoError(canMakeError);
       const [limit, page] = readSearchParameters();
+      changeSearchParameters(Number(page), Number(limit), text);
       if (!text) {
-        const offset = searchParams.get('offset') ? `offset=${searchParams.get('offset')}` : '';
-        let params = '';
-        if (offset) {
-          params = '?'.concat(offset);
-        }
-        if (limit) {
-          if (offset) {
-            params.concat('&', offset);
-          } else {
-            params = '?'.concat(`limit=${limit}`);
-          }
-        }
         setAppState({
-          pokemons: await getData(params),
-          isLoading: false,
-          doError: canMakeError,
+          pokemons: await getData((Number(page) - 1) * Number(limit), Number(limit)),
         });
-        changeSearchParameters(parseInt(page, 10) - 1, parseInt(limit, 10), text);
       } else {
-        const allPokemons = await getData('?limit=2000');
-        const foundPokemons = allPokemons.filter((el) =>
-          el.name.toLowerCase().includes(text.toLowerCase())
+        const foundPokemons = await getData().then((data) =>
+          data.filter((el) => el.name.toLowerCase().includes(text.toLowerCase()))
         );
         setAppState({
-          pokemons: foundPokemons,
-          isLoading: false,
-          doError: canMakeError,
+          pokemons: foundPokemons.slice(
+            (Number(page) - 1) * Number(limit),
+            (Number(page) - 1) * Number(limit) + Number(limit)
+          ),
         });
-        changeSearchParameters(0, parseInt(limit, 10), text);
         setPokemonsCount(foundPokemons.length);
       }
+      setIsLoading(false);
     },
-    [getData, searchParams, readSearchParameters, changeSearchParameters]
+    [getData, readSearchParameters, changeSearchParameters]
   );
 
   useEffect(() => {
     const [limit, page, searchInit] = readSearchParameters();
-    changeSearchParameters(parseInt(page, 10) - 1, parseInt(limit, 10), searchInit);
+    if (searchInit) localStorage.setItem('pokedexSearch', String(searchInit));
+    changeSearchParameters(
+      Number(page),
+      Number(limit),
+      localStorage.getItem('pokedexSearch') ?? ''
+    );
     search(localStorage.getItem('pokedexSearch') ?? '').catch((err) => console.error(err));
-  }, [search, readSearchParameters, changeSearchParameters]);
+  }, [readSearchParameters, changeSearchParameters, search, searchParams]);
 
   return (
     <>
       <Search searchMethod={search} />
-      {state.isLoading ? (
+      {isLoading ? (
         <Loader isBig />
       ) : (
         <>
@@ -121,18 +130,23 @@ export default function App() {
             state.pokemons.map((el) => {
               return (
                 <ComponentsErrorBoundary updateMethod={search} key={nanoid(5)}>
-                  <Item pokemonInfo={el} key={el.name} id={el.name} doError={decideIsError()} />
+                  <Item
+                    pokemonInfo={el}
+                    key={el.name}
+                    id={el.name}
+                    doError={doError ? decideIsError() : false}
+                  />
                 </ComponentsErrorBoundary>
               );
             })
           )}
         </>
       )}
-      {!state.isLoading && (
+      {!isLoading && (
         <Pagination
           changeCount={changeSearchParameters}
           totalElements={pokemonsCount}
-          elementsPerPage={pokemonsPerPage}
+          elementsPerPage={Number(searchParams.get('limit'))}
         />
       )}
     </>
