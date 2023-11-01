@@ -27,59 +27,65 @@ export default function Pagination(props: PaginationProps) {
     changeCount(parseInt(target.innerText, 10), parseInt(state.limit, 10), state.search);
   };
 
+  const nextPage = () => {
+    const pageQuantity = Math.ceil(totalElements / elOnPage);
+    if (+state.page < pageQuantity) {
+      changeCount(+state.page + 1, parseInt(state.limit, 10), state.search);
+    }
+  };
+
+  const previousPage = () => {
+    if (+state.page > 1) {
+      changeCount(+state.page - 1, parseInt(state.limit, 10), state.search);
+    }
+  };
+
+  const calculatePagesArray = () => {
+    const pageQuantity = Math.ceil(totalElements / elOnPage);
+    if (pageQuantity <= 7) {
+      return [...Array.from(Array(pageQuantity).keys())];
+    }
+    return [];
+  };
+
   return (
     <>
       <div className={styles.pagination}>
         <div className={styles.pages}>
-          <div className={styles.arrowLeft}>&laquo;</div>
-          {Math.ceil(totalElements / elOnPage) <= 6 ? (
-            [...Array(Math.ceil(totalElements / elOnPage))].map((_, index) => (
-              <span
-                role="button"
-                tabIndex={0}
-                onKeyDown={changePage}
-                onClick={changePage}
-                className={state.page === (index + 1).toString() ? styles.selected : styles.num}
-                key={nanoid(5)}
-              >
-                {index + 1}
-              </span>
-            ))
-          ) : (
-            <>
-              {[...Array.from(Array(3).keys())].map((el) => (
-                <span
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={changePage}
-                  onClick={changePage}
-                  className={state.page === (el + 1).toString() ? styles.selected : styles.num}
-                  key={nanoid(5)}
-                >
-                  {el + 1}
-                </span>
-              ))}
-              <span style={{ border: 'none' }} className={styles.num} key={nanoid(5)}>
-                {' '}
-                ...{' '}
-              </span>
-              {[...Array.from(Array(Math.ceil(totalElements / Number(state.limit))).keys())]
-                .splice(Math.ceil(totalElements / elOnPage) - 3)
-                .map((el) => (
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={changePage}
-                    onClick={changePage}
-                    className={state.page === (el + 1).toString() ? styles.selected : styles.num}
-                    key={nanoid(5)}
-                  >
-                    {el + 1}
-                  </span>
-                ))}
-            </>
-          )}
-          <div className={styles.arrowRight}>&raquo;</div>
+          <div
+            role="button"
+            onKeyDown={previousPage}
+            onClick={previousPage}
+            tabIndex={0}
+            className={+state.page > 1 ? styles.arrowLeft : styles.arrowLeftDisabled}
+          >
+            &laquo;
+          </div>
+          {calculatePagesArray().map((el) => (
+            <span
+              role="button"
+              tabIndex={0}
+              onKeyDown={changePage}
+              onClick={changePage}
+              className={state.page === (el + 1).toString() ? styles.selected : styles.num}
+              key={nanoid(5)}
+            >
+              {el + 1}
+            </span>
+          ))}
+          <div
+            role="button"
+            tabIndex={0}
+            onKeyDown={nextPage}
+            onClick={nextPage}
+            className={
+              +state.page < Math.ceil(totalElements / elOnPage)
+                ? styles.arrowRight
+                : styles.arrowRightDisabled
+            }
+          >
+            &raquo;
+          </div>
         </div>
         <div className={styles.info}>
           <p className={styles.bottom_info}> Total results: {totalElements}</p>

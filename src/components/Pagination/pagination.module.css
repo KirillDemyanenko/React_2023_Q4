@@ -21,6 +21,21 @@
   cursor: pointer;
 }
 
+.arrowLeftDisabled,
+.arrowRightDisabled {
+  display: flex;
+  border-radius: 50%;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin: 0 1rem;
+  background-color: var(--main-text-color);
+  color: var(--main-bg-color);
+  opacity: 0.5;
+}
+
 .arrowLeft:hover,
 .arrowRight:hover {
   border: 1px solid var(--main-bg-color);
