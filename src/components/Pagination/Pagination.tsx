@@ -49,7 +49,7 @@ export default function Pagination(props: PaginationProps) {
     if (+state.page < 5) {
       return [...Array.from(Array(5).keys()), ...[-1, pageQuantity - 1]];
     }
-    if (+state.page > 4 && +state.page < pageQuantity - 6) {
+    if (+state.page > 4 && +state.page < pageQuantity - 3) {
       return [
         ...[0, -1],
         ...Array.from(Array(pageQuantity).keys()).splice(
