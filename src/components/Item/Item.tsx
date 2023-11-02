@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { ItemProps, PokemonInfo, TypesImages } from '../../types';
 import images from '../../images';
@@ -9,13 +9,14 @@ export default function Item(props: ItemProps) {
   if (doError) throw new Error('Oops! I Did `It Again...');
   const [state, setItemState] = useState({ isLoad: false, info: {} as PokemonInfo, imgURL: '' });
 
+  const fetchData = useCallback(async () => {
+    const infoData = (await fetch(pokemonInfo.url).then((data) => data.json())) as PokemonInfo;
+    setItemState({ isLoad: true, info: infoData, imgURL: infoData.sprites.front_default ?? '' });
+  }, [pokemonInfo.url]);
+
   useEffect(() => {
-    async function fetchData() {
-      const infoData = (await fetch(pokemonInfo.url).then((data) => data.json())) as PokemonInfo;
-      setItemState({ isLoad: true, info: infoData, imgURL: infoData.sprites.front_default ?? '' });
-    }
     fetchData().catch((err) => console.error(err));
-  }, [pokemonInfo, state]);
+  }, [fetchData]);
 
   return state.isLoad ? (
     <div className={`res ${state.info?.types?.at(0)?.type?.name ?? ''}`} key={id}>
