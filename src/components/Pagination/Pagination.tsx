@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { PaginationProps } from '../../types';
@@ -17,13 +17,20 @@ export default function Pagination(props: PaginationProps) {
     setState({ limit, search, page });
   }, [searchParams]);
 
-  const changeState = (ev: Event) => {
-    const target = ev.target as HTMLSelectElement;
-    changeCount(1, parseInt(target?.value, 10), state.search);
+  const changeState = (
+    ev:
+      | React.MouseEvent<HTMLDivElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.KeyboardEvent<HTMLSelectElement>
+  ) => {
+    const target = ev.currentTarget;
+    changeCount(1, parseInt(target?.innerText, 10), state.search);
   };
 
-  const changePage = (ev: Event) => {
-    const target = ev.target as HTMLSpanElement;
+  const changePage = (
+    ev: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>
+  ) => {
+    const target = ev.currentTarget;
     changeCount(parseInt(target.innerText, 10), parseInt(state.limit, 10), state.search);
   };
 
@@ -45,6 +52,22 @@ export default function Pagination(props: PaginationProps) {
     if (pageQuantity <= 7) {
       return [...Array.from(Array(pageQuantity).keys())];
     }
+    if (+state.page < 5) {
+      return [...Array.from(Array(5).keys()), ...[-1, pageQuantity - 1]];
+    }
+    if (+state.page > 4 && +state.page < pageQuantity - 6) {
+      return [
+        ...[0, -1],
+        ...Array.from(Array(pageQuantity).keys()).splice(
+          +state.page - 3,
+          pageQuantity - (pageQuantity - 5)
+        ),
+        ...[-1, pageQuantity - 1],
+      ];
+    }
+    if (+state.page >= pageQuantity - 6) {
+      return [...[0, -1], ...Array.from(Array(pageQuantity).keys()).splice(pageQuantity - 5)];
+    }
     return [];
   };
 
@@ -61,18 +84,29 @@ export default function Pagination(props: PaginationProps) {
           >
             &laquo;
           </div>
-          {calculatePagesArray().map((el) => (
-            <span
-              role="button"
-              tabIndex={0}
-              onKeyDown={changePage}
-              onClick={changePage}
-              className={state.page === (el + 1).toString() ? styles.selected : styles.num}
-              key={nanoid(5)}
-            >
-              {el + 1}
-            </span>
-          ))}
+          {calculatePagesArray().map((el) =>
+            el >= 0 ? (
+              <span
+                role="button"
+                tabIndex={0}
+                onKeyDown={changePage}
+                onClick={changePage}
+                className={state.page === (el + 1).toString() ? styles.selected : styles.num}
+                key={nanoid(5)}
+              >
+                {el + 1}
+              </span>
+            ) : (
+              <span
+                style={{ border: 'none', cursor: 'default' }}
+                className={styles.dots}
+                key={nanoid(5)}
+              >
+                {' '}
+                &#8230;{' '}
+              </span>
+            )
+          )}
           <div
             role="button"
             tabIndex={0}

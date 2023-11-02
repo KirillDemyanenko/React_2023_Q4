@@ -142,7 +142,7 @@ export default function App() {
           )}
         </>
       )}
-      {!isLoading && (
+      {!isLoading && state.pokemons.length > 0 && (
         <Pagination
           changeCount={changeSearchParameters}
           totalElements={pokemonsCount}
