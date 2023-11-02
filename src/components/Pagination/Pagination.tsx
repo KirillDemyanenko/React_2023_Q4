@@ -17,20 +17,14 @@ export default function Pagination(props: PaginationProps) {
     setState({ limit, search, page });
   }, [searchParams]);
 
-  const changeState = (
-    ev:
-      | React.MouseEvent<HTMLDivElement>
-      | React.ChangeEvent<HTMLSelectElement>
-      | React.KeyboardEvent<HTMLSelectElement>
-  ) => {
-    const target = ev.currentTarget;
-    changeCount(1, parseInt(target?.innerText, 10), state.search);
+  const changeLimit = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = ev.target;
+    changeCount(1, parseInt(value, 10), state.search);
   };
 
-  const changePage = (
-    ev: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>
-  ) => {
-    const target = ev.currentTarget;
+  const changePage = ({
+    currentTarget: target,
+  }: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>) => {
     changeCount(parseInt(target.innerText, 10), parseInt(state.limit, 10), state.search);
   };
 
@@ -125,7 +119,7 @@ export default function Pagination(props: PaginationProps) {
           <p className={styles.bottom_info}> Total results: {totalElements}</p>
           <label className={styles.bottom_info} htmlFor="perPage">
             Element per page
-            <select name="perPage" id="perPage" defaultValue={elOnPage} onChange={changeState}>
+            <select name="perPage" id="perPage" defaultValue={elOnPage} onChange={changeLimit}>
               <option value="" disabled>
                 -- Choose one --
               </option>
