@@ -64,17 +64,20 @@ export default function App() {
    * Fetch data from API and set in state number of elements found.
    * Without params return all records.
    * @param {number} [offset=0] Quantity skipped records
-   * @param {limit} [limit=1292] Quantity items in response
+   * @param {number} [limit=1292] Quantity items in response
    * @returns {Promise<PokemonSearchInfo[]>} Return array of Pokémon Promise
    */
-  const getData = useCallback(async (offset = 0, limit = 1292): Promise<PokemonSearchInfo[]> => {
-    return fetch(import.meta.env.VITE_API_URL.concat(`?offset=${offset}&limit=${limit}`))
-      .then((data) => data.json())
-      .then((res: PokemonsResponse) => {
-        setPokemonsCount(res.count);
-        return res.results;
-      });
-  }, []);
+  const getData = useCallback(
+    async (offset: number = 0, limit: number = 1292): Promise<PokemonSearchInfo[]> => {
+      return fetch(import.meta.env.VITE_API_URL.concat(`?offset=${offset}&limit=${limit}`))
+        .then((data) => data.json())
+        .then((res: PokemonsResponse) => {
+          setPokemonsCount(res.count);
+          return res.results;
+        });
+    },
+    []
+  );
 
   const search = useCallback(
     async (text = '', canMakeError = false) => {
@@ -112,7 +115,7 @@ export default function App() {
       localStorage.getItem('pokedexSearch') ?? ''
     );
     search(localStorage.getItem('pokedexSearch') ?? '').catch((err) => console.error(err));
-  }, [readSearchParameters, changeSearchParameters, search, searchParams]);
+  }, [readSearchParameters, changeSearchParameters, search]);
 
   return (
     <>
