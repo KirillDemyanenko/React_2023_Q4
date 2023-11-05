@@ -1,0 +1,11 @@
+.details {
+  display: flex;
+  padding: 30px 10px;
+  align-items: center;
+  flex-direction: column;
+  grid-column: 4;
+  grid-row-start: 2;
+  grid-row-end: 10;
+  background-color: rgb(215, 202, 202);
+  border-radius: 20px;
+}
