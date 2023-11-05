@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import App from './App';
 import './index.css';
 import ErrorPage from './pages/ErrorPage/error-page';
+import Details from './components/Details/Details';
+import Layout from './Layouts/Layout';
 
 window.addEventListener('error', (ev) => {
   ev.preventDefault();
@@ -13,8 +14,14 @@ window.addEventListener('error', (ev) => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <Layout />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: 'detail/:name',
+        element: <Details />,
+      },
+    ],
   },
 ]);
 
