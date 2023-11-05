@@ -9,3 +9,30 @@
   background-color: rgb(215, 202, 202);
   border-radius: 20px;
 }
+
+@media screen and (max-width: 1300px) {
+  .details {
+    grid-row-start: 1;
+    grid-column: 4;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .details {
+    grid-column: 3;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .details {
+    grid-row-start: 2;
+    grid-column: 1;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .details {
+    grid-row-start: 2;
+    grid-column: 2;
+  }
+}
