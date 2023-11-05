@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import { ItemProps, PokemonInfo, TypesImages } from '../../types';
 import images from '../../images';
 import Loader from '../Loader/Loader';
+import noImage from '../../assets/no-image.svg';
 
 export default function Item(props: ItemProps) {
   const { pokemonInfo, id, doError } = props;
@@ -50,7 +51,7 @@ export default function Item(props: ItemProps) {
       key={id}
     >
       <h4>{pokemonInfo.name}</h4>
-      <img src={state.imgURL} alt="img" />
+      <img src={state.imgURL || noImage} alt="img" />
       <div className="stats">
         <h5>Stats</h5>
         {state.info?.stats?.map((stat) => {
