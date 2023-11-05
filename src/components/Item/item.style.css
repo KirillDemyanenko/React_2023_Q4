@@ -5,15 +5,16 @@
   flex-direction: column;
   background: url('../../assets/card.webp') no-repeat;
   background-size: contain;
-  border-radius: 10px;
+  border-radius: 20px;
   position: relative;
   margin: auto;
-  transition: transform 0.1s ease;
+  cursor: pointer;
 }
 
 .res:hover {
-  transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
-  scale: 0.9;
+  background: url('../../assets/card-hover.webp') no-repeat;
+  background-size: contain;
+  border-radius: 20px;
 }
 
 .res h4 {
@@ -34,6 +35,7 @@
 
 .res img {
   min-height: 170px;
+  max-width: 170px;
   margin: 0 auto;
 }
 
@@ -42,6 +44,7 @@
   flex-direction: column;
   padding: 0 70px;
   margin-top: 10px;
+  font-size: 0.8rem;
 }
 
 .stats-info {
@@ -75,92 +78,110 @@
   width: 15px;
 }
 
-.bug {
+.bug,
+.bug:hover {
   background-color: #92bc2c;
   box-shadow: 0 0 20px #92bc2c;
 }
 
-.dark {
+.dark,
+.dark:hover {
   background-color: #595761;
   box-shadow: 0 0 20px #595761;
 }
 
-.dragon {
+.dragon,
+.dragon:hover {
   background-color: #0c69c8;
   box-shadow: 0 0 20px #0c69c8;
 }
 
-.electric {
+.electric,
+.electric:hover {
   background-color: #f2d94e;
   box-shadow: 0 0 20px #f2d94e;
 }
 
-.fire {
+.fire,
+.fire:hover {
   background-color: #fba54c;
   box-shadow: 0 0 20px #fba54c;
 }
 
-.fairy {
+.fairy,
+.fairy:hover {
   background-color: #ee90e6;
   box-shadow: 0 0 20px #ee90e6;
 }
 
-.fighting {
+.fighting,
+.fighting:hover {
   background-color: #d3425f;
   box-shadow: 0 0 20px #d3425f;
 }
 
-.flying {
+.flying,
+.flying:hover {
   background-color: #a1bbec;
   box-shadow: 0 0 20px #a1bbec;
 }
 
-.ghost {
+.ghost,
+.ghost:hover {
   background-color: #5f6dbc;
   box-shadow: 0 0 20px #5f6dbc;
 }
 
-.grass {
+.grass,
+.grass:hover {
   background-color: #5fbd58;
   box-shadow: 0 0 20px #5fbd58;
 }
 
-.ground {
+.ground,
+.ground:hover {
   background-color: #da7c4d;
   box-shadow: 0 0 20px #da7c4d;
 }
 
-.ice {
+.ice,
+.ice:hover {
   background-color: #75d0c1;
   box-shadow: 0 0 20px #75d0c1;
 }
 
-.normal {
+.normal,
+.normal:hover {
   background-color: #a0a29f;
   box-shadow: 0 0 20px #a0a29f;
 }
 
-.poison {
+.poison,
+.poison:hover {
   background-color: #b763cf;
   box-shadow: 0 0 20px #b763cf;
 }
 
-.psychic {
+.psychic,
+.psychic:hover {
   background-color: #fa8581;
   box-shadow: 0 0 20px #fa8581;
 }
 
-.rock {
+.rock,
+.rock:hover {
   background-color: #c9bb8a;
   box-shadow: 0 0 20px #c9bb8a;
 }
 
-.steel {
+.steel,
+.steel:hover {
   background-color: #5695a3;
   box-shadow: 0 0 20px #5695a3;
 }
 
-.water {
+.water,
+.water:hover {
   background-color: #539ddf;
   box-shadow: 0 0 20px #539ddf;
 }

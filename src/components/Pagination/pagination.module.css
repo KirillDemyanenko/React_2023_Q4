@@ -1,0 +1,138 @@
+.pagination {
+  display: flex;
+  grid-column: 1 / 5;
+  min-height: 6rem;
+  margin: 0.5rem 1rem;
+  flex-wrap: wrap;
+}
+
+.arrowLeft,
+.arrowRight {
+  display: flex;
+  border-radius: 50%;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  margin: 0 1rem;
+  cursor: pointer;
+}
+
+.arrowLeftDisabled,
+.arrowRightDisabled {
+  display: flex;
+  border-radius: 50%;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin: 0 1rem;
+  background-color: var(--main-text-color);
+  color: var(--main-bg-color);
+  opacity: 0.5;
+}
+
+.arrowLeft:hover,
+.arrowRight:hover {
+  border: 1px solid var(--main-bg-color);
+  background-color: var(--main-text-color);
+  color: var(--main-bg-color);
+}
+
+select {
+  width: 50px;
+  border-radius: 10px;
+  margin: auto 1rem;
+  cursor: pointer;
+}
+
+.pages,
+.info {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.info {
+  gap: 4rem;
+}
+
+.num,
+.dots {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 2px;
+  border: 1px solid var(--main-bg-color);
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.num:hover {
+  border: none;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  border-radius: 50%;
+}
+
+.selected {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 2px;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.bottom_info {
+  display: flex;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 1300px) {
+  .pagination {
+    grid-column: 1 / 4;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .pagination {
+    grid-column: 1 / 3;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .pagination {
+    grid-column: 1 / 2;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .pagination {
+    margin: 0.5rem 0;
+    font-size: 0.7rem;
+  }
+
+  .info {
+    gap: 1rem;
+    font-size: 1rem;
+  }
+
+  .num,
+  .dots {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}

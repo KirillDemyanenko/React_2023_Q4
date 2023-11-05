@@ -52,7 +52,7 @@
 
   .not-found {
     grid-column: 1 / 2;
-    grid-row: 3 / 10;
+    grid-row-start: 2;
   }
 }
 

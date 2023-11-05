@@ -1,64 +1,77 @@
-import React from 'react';
-import { SearchProps, SearchState } from '../../types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { SearchProps } from '../../types';
 
-export default class Search extends React.PureComponent<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-    this.makeError = this.makeError.bind(this);
-    this.clearInput = this.clearInput.bind(this);
-    this.state = { text: '' };
-  }
+export default function Search(props: SearchProps) {
+  const [text, setText] = useState('');
+  const { searchMethod } = props;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  componentDidMount() {
+  useEffect(() => {
     const savedText = localStorage.getItem('pokedexSearch') ?? '';
-    this.setState({ text: savedText });
-    this.props.searchMethod(savedText, false);
-  }
+    setText(savedText);
+  }, []);
 
-  makeError() {
-    this.props.searchMethod(this.state.text, true);
-  }
+  const changeSearchParameters = useCallback(
+    (page = 1, limit = 20, search = '') => {
+      const query: string[][] = [
+        ['page', page.toString()],
+        ['limit', limit.toString()],
+      ];
+      if (search) query.push(['search', search]);
+      setSearchParams(new URLSearchParams(query));
+    },
+    [setSearchParams]
+  );
 
-  handleClick(): void {
-    this.props.searchMethod(this.state.text, false);
-  }
+  const handleClick = (): void => {
+    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), text);
+    searchMethod(text, false);
+  };
 
-  saveToStorage(text: string) {
-    this.setState({ text: text });
-    localStorage.setItem('pokedexSearch', text);
-  }
+  const makeError = () => {
+    searchMethod(text, true);
+  };
 
-  clearInput() {
-    this.saveToStorage('');
-    this.props.searchMethod('', false);
-  }
+  const saveToStorage = (textForStorageSave: string) => {
+    setText(textForStorageSave);
+    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), textForStorageSave);
+    localStorage.setItem('pokedexSearch', textForStorageSave);
+  };
 
-  render() {
-    return (
-      <>
-        <div className="search">
-          <div className="wrapper">
-            <input
-              type="text"
-              value={this.state.text}
-              onChange={(event) => this.saveToStorage(event.target.value.trim())}
-              placeholder={'Type something...'}
-            />
-            {this.state.text ? (
-              <div className="clear" onClick={this.clearInput}>
-                ❌
-              </div>
-            ) : (
-              <></>
-            )}
-            <button onClick={this.handleClick}>search</button>
+  const clearInput = () => {
+    saveToStorage('');
+    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), text);
+    searchMethod('', false);
+  };
+
+  return (
+    <div className="search">
+      <div className="wrapper">
+        <input
+          type="text"
+          value={text}
+          onChange={(event) => saveToStorage(event.target.value.trim())}
+          placeholder="Type something..."
+        />
+        {text && (
+          <div
+            tabIndex={0}
+            role="button"
+            onKeyDown={clearInput}
+            className="clear"
+            onClick={clearInput}
+          >
+            ❌
           </div>
-          <button className="make-error" onClick={this.makeError}>
-            Make error
-          </button>
-        </div>
-      </>
-    );
-  }
+        )}
+        <button type="button" onClick={handleClick}>
+          search
+        </button>
+      </div>
+      <button type="button" className="make-error" onClick={makeError}>
+        Make error
+      </button>
+    </div>
+  );
 }

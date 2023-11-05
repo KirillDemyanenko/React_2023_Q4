@@ -18,23 +18,25 @@ import steel from './assets/icons/steel.svg';
 import water from './assets/icons/water.svg';
 import { TypesImages } from './types';
 
-export const images: TypesImages = {
-  bug: bug,
-  electric: electric,
-  water: water,
-  dragon: dragon,
-  fairy: fairy,
-  fighting: fighting,
-  fire: fire,
-  flying: flying,
-  ghost: ghost,
-  grass: grass,
-  ground: ground,
-  ice: ice,
-  normal: normal,
-  dark: dark,
-  poison: poison,
-  psychic: psychic,
-  rock: rock,
-  steel: steel,
+const images: TypesImages = {
+  bug,
+  electric,
+  water,
+  dragon,
+  fairy,
+  fighting,
+  fire,
+  flying,
+  ghost,
+  grass,
+  ground,
+  ice,
+  normal,
+  dark,
+  poison,
+  psychic,
+  rock,
+  steel,
 };
+
+export default images;

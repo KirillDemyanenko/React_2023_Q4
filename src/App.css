@@ -6,8 +6,6 @@
 }
 
 .not-found {
-  grid-column-start: 2;
-  grid-column-end: 5;
-  grid-row-start: 3;
-  grid-row-end: 5;
+  grid-column: 1 / 5;
+  grid-row-start: 2;
 }

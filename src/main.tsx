@@ -1,15 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
+import ErrorPage from './pages/ErrorPage/error-page';
+import Details from './components/Details/Details';
+import Layout from './Layouts/Layout';
 
 window.addEventListener('error', (ev) => {
   ev.preventDefault();
   console.error('Render error ', ev.error.message);
 });
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: 'detail/:name',
+        element: <Details />,
+        loader: async ({ params }) => {
+          return fetch(import.meta.env.VITE_API_URL.concat('/', params.name?.toString())).then(
+            (data) => data.json()
+          );
+        },
+      },
+    ],
+  },
+]);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );

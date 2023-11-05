@@ -1,11 +1,5 @@
 import { ReactElement } from 'react';
 
-export type State = {
-  pokemons: PokemonSearchInfo[];
-  isLoading: boolean;
-  doError: boolean;
-};
-
 export type SearchState = {
   text: string;
 };
@@ -16,16 +10,17 @@ export type SearchProps = {
   searchMethod: (text: string, doErrors: boolean) => void;
 };
 
-export type ItemState = {
-  isLoad: boolean;
-  imgURL: string;
-};
-
 export type Props = NonNullable<unknown>;
 
 export type PokemonSearchInfo = {
   name: string;
   url: string;
+};
+
+export type State = {
+  pokemons: PokemonSearchInfo[];
+  isLoading: boolean;
+  doError: boolean;
 };
 
 export type PokemonsResponse = {
@@ -50,7 +45,6 @@ export type BoundaryState = {
 
 export type ItemProps = {
   pokemonInfo: PokemonSearchInfo;
-  key: string;
   id: string;
   doError: boolean;
 };
@@ -224,6 +218,12 @@ export type PokemonInfo = {
   weight: number;
 };
 
+export type ItemState = {
+  isLoad: boolean;
+  imgURL: string;
+  info: PokemonInfo;
+};
+
 export type TypesImages = {
   bug: string;
   electric: string;
@@ -243,4 +243,10 @@ export type TypesImages = {
   psychic: string;
   rock: string;
   steel: string;
+};
+
+export type PaginationProps = {
+  elementsPerPage: number;
+  totalElements: number;
+  changeCount: (page: number, limit: number, search: string) => void;
 };

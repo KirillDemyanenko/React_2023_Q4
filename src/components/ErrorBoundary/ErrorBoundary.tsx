@@ -15,23 +15,28 @@ export default class ComponentsErrorBoundary extends React.PureComponent<
     return { hasError: true };
   }
 
-  handleClick(): void {
-    this.props.updateMethod(localStorage.getItem('pokedexSearch') ?? '', false);
-  }
-
   componentDidCatch(error: Error) {
     console.error(error.message);
   }
 
+  handleClick(): void {
+    const { updateMethod } = this.props;
+    updateMethod(localStorage.getItem('pokedexSearch') ?? '', false);
+  }
+
   render() {
-    if (this.state.hasError) {
+    const { hasError } = this.state;
+    const { children } = this.props;
+    if (hasError) {
       return (
         <div className="error">
           <h3>Something was wrong.</h3>
-          <button onClick={this.handleClick}>Fix please...</button>
+          <button type="button" onClick={this.handleClick}>
+            Fix please...
+          </button>
         </div>
       );
     }
-    return this.props.children;
+    return children;
   }
 }
