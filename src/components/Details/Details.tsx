@@ -42,7 +42,7 @@ export default function Details() {
   }, [fetchData]);
 
   return state.isLoad ? (
-    <div className={styles.details}>
+    <div className={styles.details} style={{ paddingTop: window.scrollY + 30 }}>
       <h4>{state.info.name}</h4>
       <img src={state.imgURL} alt="img" />
       <div className="stats">
