@@ -1,22 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLoaderData, useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './details.module.css';
 import { PokemonInfo } from '../../types';
 import Loader from '../Loader/Loader';
 
 export default function Details() {
-  const { name } = useParams();
+  const infoData = useLoaderData() as PokemonInfo;
   const navigate = useNavigate();
-  const [state, setItemState] = useState({ isLoad: false, info: {} as PokemonInfo, imgURL: '' });
+  const [state, setItemState] = useState({ info: {} as PokemonInfo, imgURL: '' });
   const [searchParams] = useSearchParams();
-
-  const fetchData = useCallback(async () => {
-    setItemState({ isLoad: false, info: {} as PokemonInfo, imgURL: '' });
-    const infoData = (await fetch(import.meta.env.VITE_API_URL.concat('/', name?.toString())).then(
-      (data) => data.json()
-    )) as PokemonInfo;
-    setItemState({ isLoad: true, info: infoData, imgURL: infoData.sprites.front_default ?? '' });
-  }, [name]);
+  const [isLoad, setIsLoad] = useState(false);
 
   const readSearchParameters = useCallback(() => {
     return [
@@ -38,10 +31,12 @@ export default function Details() {
   };
 
   useEffect(() => {
-    fetchData().catch((err) => console.error(err));
-  }, [fetchData]);
+    setIsLoad(false);
+    setItemState({ info: infoData, imgURL: infoData.sprites.front_default ?? '' });
+    setIsLoad(true);
+  }, [infoData, setIsLoad]);
 
-  return state.isLoad ? (
+  return isLoad ? (
     <div className={styles.details} style={{ paddingTop: window.scrollY + 30 }}>
       <h4>{state.info.name}</h4>
       <img src={state.imgURL} alt="img" />

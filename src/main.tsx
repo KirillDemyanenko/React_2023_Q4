@@ -20,6 +20,11 @@ const router = createBrowserRouter([
       {
         path: 'detail/:name',
         element: <Details />,
+        loader: async ({ params }) => {
+          return fetch(import.meta.env.VITE_API_URL.concat('/', params.name?.toString())).then(
+            (data) => data.json()
+          );
+        },
       },
     ],
   },
