@@ -1,7 +1,7 @@
 .pagination {
   display: flex;
-  grid-column: 1 / 5;
   min-height: 6rem;
+  width: 100%;
   margin: 0.5rem 1rem;
   flex-wrap: wrap;
 }

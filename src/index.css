@@ -11,15 +11,15 @@
 }
 
 #root {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 50px repeat(2, 1fr);
-  grid-gap: 10px;
+  display: flex;
+  gap: 10px;
   min-height: 100vh;
 }
 
 .not-found {
-  grid-column: 1 / 5;
+  display: flex;
+  margin: auto;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 1300px) {

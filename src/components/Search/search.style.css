@@ -1,7 +1,7 @@
 .search {
   display: flex;
-  grid-column: 1 / 5;
   padding: 10px;
+  width: 100%;
   justify-content: center;
 }
 
