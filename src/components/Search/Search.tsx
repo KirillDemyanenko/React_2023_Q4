@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SearchProps } from '../../types';
 import AppContext from '../../main';
@@ -7,7 +7,7 @@ export default function Search(props: SearchProps) {
   const { searchMethod } = props;
   const [searchParams, setSearchParams] = useSearchParams();
   const context = useContext(AppContext);
-
+  const [timer, setTimerState] = useState(0);
   const changeSearchParameters = useCallback(
     (page = 1, limit = 20, search = '') => {
       const query: string[][] = [
@@ -31,8 +31,15 @@ export default function Search(props: SearchProps) {
 
   const saveToStorage = (textForStorageSave: string) => {
     context.search = textForStorageSave;
-    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), context.search);
     localStorage.setItem('pokedexSearch', context.search);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    setTimerState(
+      setTimeout(() => {
+        changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), context.search);
+      }, 600)
+    );
   };
 
   const clearInput = () => {
