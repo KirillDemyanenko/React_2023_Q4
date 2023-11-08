@@ -5,13 +5,17 @@ import './index.css';
 import ErrorPage from './pages/ErrorPage/error-page';
 import Details from './components/Details/Details';
 import Layout from './Layouts/Layout';
+import { AppGlobalContext, PokemonSearchInfo } from './types';
 
 window.addEventListener('error', (ev) => {
   ev.preventDefault();
   console.error('Render error ', ev.error.message);
 });
 
-const AppContext = createContext({ search: localStorage.getItem('pokedexSearch') ?? '' });
+const AppContext: React.Context<AppGlobalContext> = createContext({
+  search: localStorage.getItem('pokedexSearch') ?? '',
+  pokemons: new Array<PokemonSearchInfo>(),
+});
 
 const router = createBrowserRouter([
   {

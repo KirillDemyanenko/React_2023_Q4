@@ -1,26 +1,12 @@
 import { ReactElement } from 'react';
 
-export type SearchState = {
-  text: string;
-};
-
-export type LoaderState = Record<string, never>;
-
 export type SearchProps = {
   searchMethod: (text: string, doErrors: boolean) => void;
 };
 
-export type Props = NonNullable<unknown>;
-
 export type PokemonSearchInfo = {
   name: string;
   url: string;
-};
-
-export type State = {
-  pokemons: PokemonSearchInfo[];
-  isLoading: boolean;
-  doError: boolean;
 };
 
 export type PokemonsResponse = {
@@ -216,6 +202,11 @@ export type PokemonInfo = {
   stats: Stats[];
   types: Types[];
   weight: number;
+};
+
+export type AppGlobalContext = {
+  search: string;
+  pokemons: PokemonSearchInfo[];
 };
 
 export type ItemState = {

@@ -16,9 +16,6 @@ import Pagination from './components/Pagination/Pagination';
 import AppContext from './main';
 
 export default function App() {
-  const [state, setAppState] = useState({
-    pokemons: [] as PokemonSearchInfo[],
-  });
   const [doError, setDoError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [pokemonsCount, setPokemonsCount] = useState(0);
@@ -88,24 +85,17 @@ export default function App() {
       const [limit, page] = readSearchParameters();
       changeSearchParameters(Number(page), Number(limit), text);
       if (!text) {
-        setAppState({
-          pokemons: await getData((Number(page) - 1) * Number(limit), Number(limit)),
-        });
+        context.pokemons = await getData((+page - 1) * +limit, +limit);
       } else {
         const foundPokemons = await getData().then((data) =>
           data.filter((el) => el.name.toLowerCase().includes(text.toLowerCase()))
         );
-        setAppState({
-          pokemons: foundPokemons.slice(
-            (Number(page) - 1) * Number(limit),
-            (Number(page) - 1) * Number(limit) + Number(limit)
-          ),
-        });
+        context.pokemons = foundPokemons.slice((+page - 1) * +limit, (+page - 1) * +limit + +limit);
         setPokemonsCount(foundPokemons.length);
       }
       setIsLoading(false);
     },
-    [getData, readSearchParameters, changeSearchParameters]
+    [getData, readSearchParameters, changeSearchParameters, context]
   );
 
   useEffect(() => {
@@ -123,13 +113,13 @@ export default function App() {
         <Loader isBig />
       ) : (
         <>
-          {state.pokemons.length === 0 ? (
+          {context.pokemons.length === 0 ? (
             <div className="not-found">
               <img src={notFound} alt="not found" />
               <h3>Nothing was found...</h3>
             </div>
           ) : (
-            state.pokemons.map((el) => {
+            context.pokemons.map((el) => {
               return (
                 <ComponentsErrorBoundary updateMethod={search} key={nanoid(5)}>
                   <Item
@@ -144,7 +134,7 @@ export default function App() {
           )}
         </>
       )}
-      {!isLoading && state.pokemons.length > 0 && (
+      {!isLoading && context.pokemons.length > 0 && (
         <Pagination
           changeCount={changeSearchParameters}
           totalElements={pokemonsCount}
