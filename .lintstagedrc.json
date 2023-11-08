@@ -1,4 +1,4 @@
 {
-  "*.{ts,tsx}": ["npx prettier . --write", "eslint . --fix"],
+  "*.{ts,tsx}": ["npx prettier . --write", "eslint . --fix", "jest"],
   "*.{css,html}": ["npx prettier . --write"]
 }

@@ -1,3 +1,5 @@
 public
 dist
 .husky
+coverage
+src/__tests__
