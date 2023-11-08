@@ -3,7 +3,7 @@ import './components/Loader/loader.style.css';
 import './components/Item/item.style.css';
 import './components/Search/search.style.css';
 import './components/ErrorBoundary/error.style.css';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import type { PokemonSearchInfo, PokemonsResponse } from './types';
@@ -13,6 +13,7 @@ import notFound from './assets/ditto.png';
 import Loader from './components/Loader/Loader';
 import ComponentsErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import Pagination from './components/Pagination/Pagination';
+import AppContext from './main';
 
 export default function App() {
   const [state, setAppState] = useState({
@@ -22,6 +23,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [pokemonsCount, setPokemonsCount] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
+  const context = useContext(AppContext);
 
   /**
    * Set new query params
@@ -109,13 +111,10 @@ export default function App() {
   useEffect(() => {
     const [limit, page, searchInit] = readSearchParameters();
     if (searchInit) localStorage.setItem('pokedexSearch', String(searchInit));
-    changeSearchParameters(
-      Number(page),
-      Number(limit),
-      localStorage.getItem('pokedexSearch') ?? ''
-    );
-    search(localStorage.getItem('pokedexSearch') ?? '').catch((err) => console.error(err));
-  }, [readSearchParameters, changeSearchParameters, search]);
+    context.search = localStorage.getItem('pokedexSearch') ?? '';
+    changeSearchParameters(+page, +limit, localStorage.getItem('pokedexSearch') ?? '');
+    search(context.search).catch((err) => console.error(err));
+  }, [readSearchParameters, changeSearchParameters, search, context]);
 
   return (
     <>

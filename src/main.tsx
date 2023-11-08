@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
@@ -10,6 +10,8 @@ window.addEventListener('error', (ev) => {
   ev.preventDefault();
   console.error('Render error ', ev.error.message);
 });
+
+const AppContext = createContext({ search: localStorage.getItem('pokedexSearch') ?? '' });
 
 const router = createBrowserRouter([
   {
@@ -35,3 +37,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
+
+export default AppContext;
