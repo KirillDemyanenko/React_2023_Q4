@@ -5,6 +5,7 @@ import { ItemProps, PokemonInfo, TypesImages } from '../../types';
 import images from '../../images';
 import Loader from '../Loader/Loader';
 import noImage from '../../assets/no-image.svg';
+import styles from './item.module.css';
 
 export default function Item(props: ItemProps) {
   const { pokemonInfo, id, doError } = props;
@@ -47,23 +48,23 @@ export default function Item(props: ItemProps) {
       onClick={openDetail}
       onKeyDown={openDetail}
       tabIndex={0}
-      className={`res ${state.info?.types?.at(0)?.type?.name ?? ''}`}
+      className={`${styles.res} ${styles[state.info?.types?.at(0)?.type?.name ?? '']}`}
       key={id}
     >
       <h4>{pokemonInfo.name}</h4>
       <img src={state.imgURL || noImage} alt="img" />
-      <div className="stats">
+      <div className={styles.stats}>
         <h5>Stats</h5>
         {state.info?.stats?.map((stat) => {
           return (
-            <div className="stats-row" key={`stat-${stat.stat.name}`}>
-              <p className="stats-info">{stat?.stat?.name}</p>
-              <p className="stats-info">{stat?.base_stat}</p>
+            <div className={styles.statsRow} key={`stat-${stat.stat.name}`}>
+              <p className={styles.statsInfo}>{stat?.stat?.name}</p>
+              <p className={styles.statsInfo}>{stat?.base_stat}</p>
             </div>
           );
         })}
       </div>
-      <div className="icon">
+      <div className={styles.icon}>
         {state.info?.types?.map((val) => {
           const type = val.type.name;
           return (
@@ -71,7 +72,7 @@ export default function Item(props: ItemProps) {
               src={images[type as keyof TypesImages]}
               key={nanoid(5)}
               alt={type}
-              className={type}
+              className={styles[type]}
               title={type}
             />
           );
