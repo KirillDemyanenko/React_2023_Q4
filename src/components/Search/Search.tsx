@@ -36,7 +36,7 @@ export default function Search(props: SearchProps) {
       clearTimeout(timer);
     }
     setTimerState(
-      setTimeout(() => {
+      +setTimeout(() => {
         changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), context.search);
       }, 600)
     );
