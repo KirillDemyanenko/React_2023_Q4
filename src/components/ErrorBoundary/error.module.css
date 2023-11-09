@@ -3,16 +3,15 @@
   height: 421px;
   display: flex;
   flex-direction: column;
-  padding: 30px;
+  padding: 2rem;
   justify-content: center;
   align-items: center;
   margin: auto;
-  gap: 30px;
+  gap: 1rem;
   border: 5px double greenyellow;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 .error button {
-  font-size: 0.8rem;
   border-radius: 5px;
 }

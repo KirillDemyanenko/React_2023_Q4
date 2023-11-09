@@ -1,5 +1,6 @@
 import React from 'react';
 import { BoundaryProps, BoundaryState } from '../../types';
+import styles from './error.module.css';
 
 export default class ComponentsErrorBoundary extends React.PureComponent<
   BoundaryProps,
@@ -29,7 +30,7 @@ export default class ComponentsErrorBoundary extends React.PureComponent<
     const { children } = this.props;
     if (hasError) {
       return (
-        <div className="error">
+        <div className={styles.error}>
           <h3>Something was wrong.</h3>
           <button type="button" onClick={this.handleClick}>
             Fix please...

@@ -2,7 +2,6 @@ import './App.css';
 import './components/Loader/loader.style.css';
 import './components/Item/item.style.css';
 import './components/Search/search.style.css';
-import './components/ErrorBoundary/error.style.css';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
