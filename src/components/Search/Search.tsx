@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SearchProps } from '../../types';
 import AppContext from '../../main';
+import styles from './search.module.css';
 
 export default function Search(props: SearchProps) {
   const { searchMethod } = props;
@@ -48,8 +49,8 @@ export default function Search(props: SearchProps) {
   };
 
   return (
-    <div className="search">
-      <div className="wrapper">
+    <div className={styles.search}>
+      <div className={styles.wrapper}>
         <input
           type="text"
           value={context.search}
@@ -61,7 +62,7 @@ export default function Search(props: SearchProps) {
             tabIndex={0}
             role="button"
             onKeyDown={clearInput}
-            className="clear"
+            className={styles.clear}
             onClick={clearInput}
           >
             ❌
@@ -71,7 +72,7 @@ export default function Search(props: SearchProps) {
           search
         </button>
       </div>
-      <button type="button" className="make-error" onClick={makeError}>
+      <button type="button" className={styles.makeError} onClick={makeError}>
         Make error
       </button>
     </div>

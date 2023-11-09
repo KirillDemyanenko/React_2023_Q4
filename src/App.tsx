@@ -1,5 +1,4 @@
 import './App.css';
-import './components/Search/search.style.css';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
