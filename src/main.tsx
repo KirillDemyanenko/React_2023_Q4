@@ -6,6 +6,7 @@ import ErrorPage from './pages/ErrorPage/error-page';
 import Details from './components/Details/Details';
 import Layout from './Layouts/Layout';
 import { AppGlobalContext, PokemonSearchInfo } from './types';
+import { readSearchFromStorage } from './helpers/workWithStorage';
 
 window.addEventListener('error', (ev) => {
   ev.preventDefault();
@@ -13,7 +14,7 @@ window.addEventListener('error', (ev) => {
 });
 
 const AppContext: React.Context<AppGlobalContext> = createContext({
-  search: localStorage.getItem('pokedexSearch') ?? '',
+  search: readSearchFromStorage(),
   pokemons: new Array<PokemonSearchInfo>(),
 });
 

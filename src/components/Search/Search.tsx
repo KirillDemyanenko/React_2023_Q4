@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { SearchProps } from '../../types';
 import AppContext from '../../main';
 import styles from './search.module.css';
+import { writeSearchFromStorage } from '../../helpers/workWithStorage';
 
 export default function Search(props: SearchProps) {
   const { searchMethod } = props;
@@ -32,7 +33,7 @@ export default function Search(props: SearchProps) {
 
   const saveToStorage = (textForStorageSave: string) => {
     context.search = textForStorageSave;
-    localStorage.setItem('pokedexSearch', context.search);
+    writeSearchFromStorage(context.search);
     if (timer) {
       clearTimeout(timer);
     }

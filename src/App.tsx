@@ -10,6 +10,7 @@ import Loader from './components/Loader/Loader';
 import ComponentsErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import Pagination from './components/Pagination/Pagination';
 import AppContext from './main';
+import { readSearchFromStorage, writeSearchFromStorage } from './helpers/workWithStorage';
 
 export default function App() {
   const [doError, setDoError] = useState(false);
@@ -96,9 +97,9 @@ export default function App() {
 
   useEffect(() => {
     const [limit, page, searchInit] = readSearchParameters();
-    if (searchInit) localStorage.setItem('pokedexSearch', String(searchInit));
-    context.search = localStorage.getItem('pokedexSearch') ?? '';
-    changeSearchParameters(+page, +limit, localStorage.getItem('pokedexSearch') ?? '');
+    if (searchInit) writeSearchFromStorage(String(searchInit));
+    context.search = readSearchFromStorage();
+    changeSearchParameters(+page, +limit, readSearchFromStorage());
     search(context.search).catch((err) => console.error(err));
   }, [readSearchParameters, changeSearchParameters, search, context]);
 
