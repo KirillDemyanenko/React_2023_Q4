@@ -205,7 +205,11 @@ export type PokemonInfo = {
 
 export type AppGlobalContext = {
   search: string;
+  limit: number;
+  page: number;
   pokemons: PokemonSearchInfo[];
+  changeSearchParameters: () => void;
+  readSearchParameters: () => void;
 };
 
 export type ItemState = {

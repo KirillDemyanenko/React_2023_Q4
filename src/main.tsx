@@ -11,7 +11,11 @@ import getDataFRomAPI from './api/getDataFRomAPI';
 
 const AppContext: React.Context<AppGlobalContext> = createContext({
   search: readSearchFromStorage(),
+  limit: 20,
+  page: 1,
   pokemons: new Array<PokemonSearchInfo>(),
+  changeSearchParameters: () => {},
+  readSearchParameters: () => {},
 });
 
 const router = createBrowserRouter([

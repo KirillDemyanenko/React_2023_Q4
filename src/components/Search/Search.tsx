@@ -1,5 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import { SearchProps } from '../../types';
 import AppContext from '../../main';
 import styles from './search.module.css';
@@ -7,23 +6,12 @@ import { writeSearchFromStorage } from '../../helpers/workWithStorage';
 
 export default function Search(props: SearchProps) {
   const { searchMethod } = props;
-  const [searchParams, setSearchParams] = useSearchParams();
   const context = useContext(AppContext);
   const [timer, setTimerState] = useState(0);
-  const changeSearchParameters = useCallback(
-    (page = 1, limit = 20, search = '') => {
-      const query: string[][] = [
-        ['page', page.toString()],
-        ['limit', limit.toString()],
-      ];
-      if (search) query.push(['search', search]);
-      setSearchParams(new URLSearchParams(query));
-    },
-    [setSearchParams]
-  );
 
   const handleClick = (): void => {
-    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), context.search);
+    context.page = 1;
+    context.changeSearchParameters();
     searchMethod(context.search, false);
   };
 
@@ -39,7 +27,7 @@ export default function Search(props: SearchProps) {
     }
     setTimerState(
       +setTimeout(() => {
-        changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), context.search);
+        context.page = 1;
       }, 600)
     );
   };
