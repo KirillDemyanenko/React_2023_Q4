@@ -31,7 +31,6 @@ export type BoundaryState = {
 
 export type ItemProps = {
   pokemonInfo: PokemonSearchInfo;
-  id: string;
   doError: boolean;
 };
 

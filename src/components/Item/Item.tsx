@@ -6,18 +6,13 @@ import images from '../../images';
 import Loader from '../Loader/Loader';
 import noImage from '../../assets/no-image.svg';
 import styles from './item.module.css';
+import getPokemonByURL from '../../api/getDataFRomAPI';
 
 export default function Item(props: ItemProps) {
-  const { pokemonInfo, id, doError } = props;
+  const { pokemonInfo, doError } = props;
   const navigate = useNavigate();
-  if (doError) throw new Error('Oops! I Did `It Again...');
   const [state, setItemState] = useState({ isLoad: false, info: {} as PokemonInfo, imgURL: '' });
   const [searchParams] = useSearchParams();
-
-  const fetchData = useCallback(async () => {
-    const infoData = (await fetch(pokemonInfo.url).then((data) => data.json())) as PokemonInfo;
-    setItemState({ isLoad: true, info: infoData, imgURL: infoData.sprites.front_default ?? '' });
-  }, [pokemonInfo.url]);
 
   const readSearchParameters = useCallback(() => {
     return [
@@ -28,8 +23,15 @@ export default function Item(props: ItemProps) {
   }, [searchParams]);
 
   useEffect(() => {
-    fetchData().catch((err) => console.error(err));
-  }, [fetchData]);
+    if (doError) throw new Error('Oops! I Did `It Again...');
+    getPokemonByURL<PokemonInfo>(pokemonInfo.name).then((pokemonData) => {
+      setItemState({
+        isLoad: true,
+        info: pokemonData,
+        imgURL: pokemonData.sprites.front_default ?? '',
+      });
+    });
+  }, [doError, pokemonInfo.name]);
 
   const openDetail = () => {
     const [limit, page, search] = readSearchParameters();
@@ -49,7 +51,6 @@ export default function Item(props: ItemProps) {
       onKeyDown={openDetail}
       tabIndex={0}
       className={`${styles.res} ${styles[state.info?.types?.at(0)?.type?.name ?? '']}`}
-      key={id}
     >
       <h4>{pokemonInfo.name}</h4>
       <img src={state.imgURL || noImage} alt="img" />

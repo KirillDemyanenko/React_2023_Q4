@@ -45,7 +45,7 @@
     "import/no-extraneous-dependencies": ["error", { "peerDependencies": true }],
     "react/jsx-no-useless-fragment": "off",
     "react/jsx-filename-extension": [2, { "extensions": [".ts", ".tsx"] }],
-    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-console": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

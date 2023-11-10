@@ -5,13 +5,9 @@ import './index.css';
 import ErrorPage from './pages/ErrorPage/error-page';
 import Details from './components/Details/Details';
 import Layout from './Layouts/Layout';
-import { AppGlobalContext, PokemonSearchInfo } from './types';
+import { AppGlobalContext, PokemonInfo, PokemonSearchInfo } from './types';
 import { readSearchFromStorage } from './helpers/workWithStorage';
-
-window.addEventListener('error', (ev) => {
-  ev.preventDefault();
-  console.error('Render error ', ev.error.message);
-});
+import getDataFRomAPI from './api/getDataFRomAPI';
 
 const AppContext: React.Context<AppGlobalContext> = createContext({
   search: readSearchFromStorage(),
@@ -27,10 +23,8 @@ const router = createBrowserRouter([
       {
         path: 'detail/:name',
         element: <Details />,
-        loader: async ({ params }) => {
-          return fetch(import.meta.env.VITE_API_URL.concat('/', params.name?.toString())).then(
-            (data) => data.json()
-          );
+        loader: async ({ params }): Promise<PokemonInfo> => {
+          return getDataFRomAPI<PokemonInfo>(params.name?.toString());
         },
       },
     ],

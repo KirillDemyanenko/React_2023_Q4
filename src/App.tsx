@@ -2,7 +2,7 @@ import './App.css';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
-import type { PokemonSearchInfo, PokemonsResponse } from './types';
+import type { PokemonSearchInfo } from './types';
 import Search from './components/Search/Search';
 import Item from './components/Item/Item';
 import notFound from './assets/ditto.png';
@@ -11,6 +11,7 @@ import ComponentsErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import Pagination from './components/Pagination/Pagination';
 import AppContext from './main';
 import { readSearchFromStorage, writeSearchFromStorage } from './helpers/workWithStorage';
+import getDataFRomAPI from './api/getDataFRomAPI';
 
 export default function App() {
   const [doError, setDoError] = useState(false);
@@ -18,6 +19,7 @@ export default function App() {
   const [pokemonsCount, setPokemonsCount] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const context = useContext(AppContext);
+  const [pokemons, setPokemons] = useState(new Array<PokemonSearchInfo>());
 
   /**
    * Set new query params
@@ -56,25 +58,6 @@ export default function App() {
     return Math.floor(Math.random() * (10 - 1)) + 1 === 5 && doError;
   };
 
-  /**
-   * Fetch data from API and set in state number of elements found.
-   * Without params return all records.
-   * @param {number} [offset=0] Quantity skipped records
-   * @param {number} [limit=1292] Quantity items in response
-   * @returns {Promise<PokemonSearchInfo[]>} Return array of Pokémon Promise
-   */
-  const getData = useCallback(
-    async (offset: number = 0, limit: number = 1292): Promise<PokemonSearchInfo[]> => {
-      return fetch(import.meta.env.VITE_API_URL.concat(`?offset=${offset}&limit=${limit}`))
-        .then((data) => data.json())
-        .then((res: PokemonsResponse) => {
-          setPokemonsCount(res.count);
-          return res.results;
-        });
-    },
-    []
-  );
-
   const search = useCallback(
     async (text = '', canMakeError = false) => {
       setIsLoading(true);
@@ -82,17 +65,22 @@ export default function App() {
       const [limit, page] = readSearchParameters();
       changeSearchParameters(Number(page), Number(limit), text);
       if (!text) {
-        context.pokemons = await getData((+page - 1) * +limit, +limit);
-      } else {
-        const foundPokemons = await getData().then((data) =>
-          data.filter((el) => el.name.toLowerCase().includes(text.toLowerCase()))
+        const [pokemons1, pokemonsCount1] = await getDataFRomAPI<[PokemonSearchInfo[], number]>(
+          `?offset=${(+page - 1) * +limit}&limit=${limit}`
         );
-        context.pokemons = foundPokemons.slice((+page - 1) * +limit, (+page - 1) * +limit + +limit);
+        setPokemons(pokemons1);
+        setPokemonsCount(pokemonsCount1);
+      } else {
+        const [pokemons2] = await getDataFRomAPI<[PokemonSearchInfo[], number]>('?limit=1292');
+        const foundPokemons = pokemons2.filter((el) =>
+          el.name.toLowerCase().includes(text.toLowerCase())
+        );
         setPokemonsCount(foundPokemons.length);
+        setPokemons(foundPokemons.slice((+page - 1) * +limit, (+page - 1) * +limit + +limit));
       }
       setIsLoading(false);
     },
-    [getData, readSearchParameters, changeSearchParameters, context]
+    [readSearchParameters, changeSearchParameters]
   );
 
   useEffect(() => {
@@ -110,28 +98,23 @@ export default function App() {
         <Loader isBig />
       ) : (
         <>
-          {context.pokemons.length === 0 ? (
+          {pokemons.length === 0 ? (
             <div className="not-found">
               <img src={notFound} alt="not found" />
               <h3>Nothing was found...</h3>
             </div>
           ) : (
-            context.pokemons.map((el) => {
+            pokemons.map((el) => {
               return (
                 <ComponentsErrorBoundary updateMethod={search} key={nanoid(5)}>
-                  <Item
-                    pokemonInfo={el}
-                    key={el.name}
-                    id={el.name}
-                    doError={doError ? decideIsError() : false}
-                  />
+                  <Item pokemonInfo={el} key={el.name} doError={decideIsError()} />
                 </ComponentsErrorBoundary>
               );
             })
           )}
         </>
       )}
-      {!isLoading && context.pokemons.length > 0 && (
+      {!isLoading && pokemons.length > 0 && (
         <Pagination
           changeCount={changeSearchParameters}
           totalElements={pokemonsCount}
