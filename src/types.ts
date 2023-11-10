@@ -207,6 +207,7 @@ export type AppGlobalContext = {
   search: string;
   limit: number;
   page: number;
+  totalFoundResults: number;
   pokemons: PokemonSearchInfo[];
   changeSearchParameters: () => void;
   readSearchParameters: () => void;
@@ -237,10 +238,4 @@ export type TypesImages = {
   psychic: string;
   rock: string;
   steel: string;
-};
-
-export type PaginationProps = {
-  elementsPerPage: number;
-  totalElements: number;
-  changeCount: (page: number, limit: number, search: string) => void;
 };

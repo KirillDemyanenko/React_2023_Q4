@@ -14,6 +14,7 @@ const AppContext: React.Context<AppGlobalContext> = createContext({
   limit: 20,
   page: 1,
   pokemons: new Array<PokemonSearchInfo>(),
+  totalFoundResults: 0,
   changeSearchParameters: () => {},
   readSearchParameters: () => {},
 });

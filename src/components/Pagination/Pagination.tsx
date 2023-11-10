@@ -1,19 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { nanoid } from 'nanoid';
-import { PaginationProps } from '../../types';
 import styles from './pagination.module.css';
 import AppContext from '../../main';
+import { SearchProps } from '../../types';
 
-export default function Pagination(props: PaginationProps) {
-  const { elementsPerPage, totalElements } = props;
-  const [elOnPage] = useState(elementsPerPage);
+export default function Pagination(props: SearchProps) {
   const context = useContext(AppContext);
+  const { searchMethod } = props;
 
   const changeLimit = (ev: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = ev.target;
     context.limit = parseInt(value, 10);
     context.page = 1;
     context.changeSearchParameters();
+    searchMethod(context.search, false);
   };
 
   const changePage = ({
@@ -21,13 +21,15 @@ export default function Pagination(props: PaginationProps) {
   }: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>) => {
     context.page = parseInt(target.innerText, 10);
     context.changeSearchParameters();
+    searchMethod(context.search, false);
   };
 
   const nextPage = () => {
-    const pageQuantity = Math.ceil(totalElements / elOnPage);
+    const pageQuantity = Math.ceil(context.totalFoundResults / context.limit);
     if (context.page < pageQuantity) {
       context.page += 1;
       context.changeSearchParameters();
+      searchMethod(context.search, false);
     }
   };
 
@@ -35,11 +37,12 @@ export default function Pagination(props: PaginationProps) {
     if (context.page > 1) {
       context.page -= 1;
       context.changeSearchParameters();
+      searchMethod(context.search, false);
     }
   };
 
   const calculatePagesArray = () => {
-    const pageQuantity = Math.ceil(totalElements / elOnPage);
+    const pageQuantity = Math.ceil(context.totalFoundResults / context.limit);
     if (pageQuantity <= 7) {
       return [...Array.from(Array(pageQuantity).keys())];
     }
@@ -104,7 +107,7 @@ export default function Pagination(props: PaginationProps) {
             onKeyDown={nextPage}
             onClick={nextPage}
             className={
-              context.page < Math.ceil(totalElements / elOnPage)
+              context.page < Math.ceil(context.totalFoundResults / context.limit)
                 ? styles.arrowRight
                 : styles.arrowRightDisabled
             }
@@ -113,10 +116,10 @@ export default function Pagination(props: PaginationProps) {
           </div>
         </div>
         <div className={styles.info}>
-          <p className={styles.bottom_info}> Total results: {totalElements}</p>
+          <p className={styles.bottom_info}> Total results: {context.totalFoundResults}</p>
           <label className={styles.bottom_info} htmlFor="perPage">
             Element per page
-            <select name="perPage" id="perPage" defaultValue={elOnPage} onChange={changeLimit}>
+            <select name="perPage" id="perPage" defaultValue={context.limit} onChange={changeLimit}>
               <option value="" disabled>
                 -- Choose one --
               </option>

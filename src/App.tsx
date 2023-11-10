@@ -15,9 +15,7 @@ import getDataFRomAPI from './api/getDataFRomAPI';
 export default function App() {
   const [doError, setDoError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pokemonsCount, setPokemonsCount] = useState(0);
   const context = useContext(AppContext);
-  const [pokemons, setPokemons] = useState(new Array<PokemonSearchInfo>());
 
   /**
    * @returns {boolean} Return random boolean value if we need throw error
@@ -32,22 +30,20 @@ export default function App() {
       setDoError(canMakeError);
       context.search = text;
       if (!text) {
-        const [pokemons1, pokemonsCount1] = await getDataFRomAPI<[PokemonSearchInfo[], number]>(
+        const [pokemons1, pokemonsCount] = await getDataFRomAPI<[PokemonSearchInfo[], number]>(
           `?offset=${(context.page - 1) * context.limit}&limit=${context.limit}`
         );
-        setPokemons(pokemons1);
-        setPokemonsCount(pokemonsCount1);
+        context.pokemons = pokemons1;
+        context.totalFoundResults = pokemonsCount;
       } else {
         const [pokemons2] = await getDataFRomAPI<[PokemonSearchInfo[], number]>('?limit=1292');
         const foundPokemons = pokemons2.filter((el) =>
           el.name.toLowerCase().includes(text.toLowerCase())
         );
-        setPokemonsCount(foundPokemons.length);
-        setPokemons(
-          foundPokemons.slice(
-            (context.page - 1) * context.limit,
-            (context.page - 1) * context.limit + context.limit
-          )
+        context.totalFoundResults = foundPokemons.length;
+        context.pokemons = foundPokemons.slice(
+          (context.page - 1) * context.limit,
+          (context.page - 1) * context.limit + context.limit
         );
       }
       setIsLoading(false);
@@ -69,13 +65,13 @@ export default function App() {
         <Loader isBig />
       ) : (
         <>
-          {pokemons.length === 0 ? (
+          {context.pokemons.length === 0 ? (
             <div className="not-found">
               <img src={notFound} alt="not found" />
               <h3>Nothing was found...</h3>
             </div>
           ) : (
-            pokemons.map((el) => {
+            context.pokemons.map((el) => {
               return (
                 <ComponentsErrorBoundary updateMethod={search} key={nanoid(5)}>
                   <Item pokemonInfo={el} key={el.name} doError={decideIsError()} />
@@ -85,9 +81,7 @@ export default function App() {
           )}
         </>
       )}
-      {!isLoading && pokemons.length > 0 && (
-        <Pagination totalElements={pokemonsCount} elementsPerPage={context.limit} />
-      )}
+      {!isLoading && context.pokemons.length > 0 && <Pagination searchMethod={search} />}
     </>
   );
 }
