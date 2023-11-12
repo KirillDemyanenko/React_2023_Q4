@@ -1,5 +1,7 @@
 import React from 'react';
 import { BoundaryProps, BoundaryState } from '../../types';
+import styles from './error.module.css';
+import { readSearchFromStorage } from '../../helpers/workWithStorage';
 
 export default class ComponentsErrorBoundary extends React.PureComponent<
   BoundaryProps,
@@ -21,7 +23,7 @@ export default class ComponentsErrorBoundary extends React.PureComponent<
 
   handleClick(): void {
     const { updateMethod } = this.props;
-    updateMethod(localStorage.getItem('pokedexSearch') ?? '', false);
+    updateMethod(readSearchFromStorage(), false);
   }
 
   render() {
@@ -29,7 +31,7 @@ export default class ComponentsErrorBoundary extends React.PureComponent<
     const { children } = this.props;
     if (hasError) {
       return (
-        <div className="error">
+        <div className={styles.error}>
           <h3>Something was wrong.</h3>
           <button type="button" onClick={this.handleClick}>
             Fix please...

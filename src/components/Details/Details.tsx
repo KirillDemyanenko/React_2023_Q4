@@ -5,7 +5,7 @@ import { PokemonInfo } from '../../types';
 import Loader from '../Loader/Loader';
 
 export default function Details() {
-  const infoData = useLoaderData() as PokemonInfo;
+  const infoData = useLoaderData();
   const navigate = useNavigate();
   const [state, setItemState] = useState({ info: {} as PokemonInfo, imgURL: '' });
   const [searchParams] = useSearchParams();

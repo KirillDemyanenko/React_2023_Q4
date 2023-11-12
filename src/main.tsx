@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import ErrorPage from './pages/ErrorPage/error-page';
 import Details from './components/Details/Details';
 import Layout from './Layouts/Layout';
+import { AppGlobalContext, PokemonInfo, PokemonSearchInfo } from './types';
+import { readSearchFromStorage } from './helpers/workWithStorage';
+import getDataFRomAPI from './api/getDataFRomAPI';
 
-window.addEventListener('error', (ev) => {
-  ev.preventDefault();
-  console.error('Render error ', ev.error.message);
+const AppContext: React.Context<AppGlobalContext> = createContext({
+  search: readSearchFromStorage(),
+  limit: 20,
+  page: 1,
+  pokemons: new Array<PokemonSearchInfo>(),
+  totalFoundResults: 0,
+  changeSearchParameters: () => {},
+  readSearchParameters: () => {},
 });
 
 const router = createBrowserRouter([
@@ -20,10 +28,8 @@ const router = createBrowserRouter([
       {
         path: 'detail/:name',
         element: <Details />,
-        loader: async ({ params }) => {
-          return fetch(import.meta.env.VITE_API_URL.concat('/', params.name?.toString())).then(
-            (data) => data.json()
-          );
+        loader: async ({ params }): Promise<PokemonInfo> => {
+          return getDataFRomAPI<PokemonInfo>(params.name?.toString());
         },
       },
     ],
@@ -35,3 +41,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
+
+export default AppContext;

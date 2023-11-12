@@ -1,65 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useContext } from 'react';
 import { nanoid } from 'nanoid';
-import { PaginationProps } from '../../types';
 import styles from './pagination.module.css';
+import AppContext from '../../main';
+import { SearchProps } from '../../types';
 
-export default function Pagination(props: PaginationProps) {
-  const { elementsPerPage, totalElements, changeCount } = props;
-  const [elOnPage] = useState(elementsPerPage);
-  const [searchParams] = useSearchParams();
-  const [state, setState] = useState({ limit: '20', search: '', page: '0' });
-
-  useEffect(() => {
-    const limit = searchParams.get('limit') ?? '20';
-    const search = searchParams.get('search') ?? '';
-    const page = searchParams.get('page') ?? '1';
-    setState({ limit, search, page });
-  }, [searchParams]);
+export default function Pagination(props: SearchProps) {
+  const context = useContext(AppContext);
+  const { searchMethod } = props;
 
   const changeLimit = (ev: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = ev.target;
-    changeCount(1, parseInt(value, 10), state.search);
+    context.limit = parseInt(value, 10);
+    context.page = 1;
+    context.changeSearchParameters();
+    searchMethod(context.search, false);
   };
 
   const changePage = ({
     currentTarget: target,
   }: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>) => {
-    changeCount(parseInt(target.innerText, 10), parseInt(state.limit, 10), state.search);
+    context.page = parseInt(target.innerText, 10);
+    context.changeSearchParameters();
+    searchMethod(context.search, false);
   };
 
   const nextPage = () => {
-    const pageQuantity = Math.ceil(totalElements / elOnPage);
-    if (+state.page < pageQuantity) {
-      changeCount(+state.page + 1, parseInt(state.limit, 10), state.search);
+    const pageQuantity = Math.ceil(context.totalFoundResults / context.limit);
+    if (context.page < pageQuantity) {
+      context.page += 1;
+      context.changeSearchParameters();
+      searchMethod(context.search, false);
     }
   };
 
   const previousPage = () => {
-    if (+state.page > 1) {
-      changeCount(+state.page - 1, parseInt(state.limit, 10), state.search);
+    if (context.page > 1) {
+      context.page -= 1;
+      context.changeSearchParameters();
+      searchMethod(context.search, false);
     }
   };
 
   const calculatePagesArray = () => {
-    const pageQuantity = Math.ceil(totalElements / elOnPage);
+    const pageQuantity = Math.ceil(context.totalFoundResults / context.limit);
     if (pageQuantity <= 7) {
       return [...Array.from(Array(pageQuantity).keys())];
     }
-    if (+state.page < 5) {
+    if (context.page < 5) {
       return [...Array.from(Array(5).keys()), ...[-1, pageQuantity - 1]];
     }
-    if (+state.page > 4 && +state.page < pageQuantity - 3) {
+    if (context.page > 4 && context.page < pageQuantity - 3) {
       return [
         ...[0, -1],
         ...Array.from(Array(pageQuantity).keys()).splice(
-          +state.page - 3,
+          context.page - 3,
           pageQuantity - (pageQuantity - 5)
         ),
         ...[-1, pageQuantity - 1],
       ];
     }
-    if (+state.page >= pageQuantity - 6) {
+    if (context.page >= pageQuantity - 6) {
       return [...[0, -1], ...Array.from(Array(pageQuantity).keys()).splice(pageQuantity - 5)];
     }
     return [];
@@ -74,7 +74,7 @@ export default function Pagination(props: PaginationProps) {
             onKeyDown={previousPage}
             onClick={previousPage}
             tabIndex={0}
-            className={+state.page > 1 ? styles.arrowLeft : styles.arrowLeftDisabled}
+            className={context.page > 1 ? styles.arrowLeft : styles.arrowLeftDisabled}
           >
             &laquo;
           </div>
@@ -85,7 +85,7 @@ export default function Pagination(props: PaginationProps) {
                 tabIndex={0}
                 onKeyDown={changePage}
                 onClick={changePage}
-                className={state.page === (el + 1).toString() ? styles.selected : styles.num}
+                className={context.page === el + 1 ? styles.selected : styles.num}
                 key={nanoid(5)}
               >
                 {el + 1}
@@ -107,7 +107,7 @@ export default function Pagination(props: PaginationProps) {
             onKeyDown={nextPage}
             onClick={nextPage}
             className={
-              +state.page < Math.ceil(totalElements / elOnPage)
+              context.page < Math.ceil(context.totalFoundResults / context.limit)
                 ? styles.arrowRight
                 : styles.arrowRightDisabled
             }
@@ -116,10 +116,10 @@ export default function Pagination(props: PaginationProps) {
           </div>
         </div>
         <div className={styles.info}>
-          <p className={styles.bottom_info}> Total results: {totalElements}</p>
+          <p className={styles.bottom_info}> Total results: {context.totalFoundResults}</p>
           <label className={styles.bottom_info} htmlFor="perPage">
             Element per page
-            <select name="perPage" id="perPage" defaultValue={elOnPage} onChange={changeLimit}>
+            <select name="perPage" id="perPage" defaultValue={context.limit} onChange={changeLimit}>
               <option value="" disabled>
                 -- Choose one --
               </option>

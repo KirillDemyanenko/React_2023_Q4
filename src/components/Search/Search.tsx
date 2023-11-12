@@ -1,65 +1,57 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import { SearchProps } from '../../types';
+import AppContext from '../../main';
+import styles from './search.module.css';
+import { writeSearchFromStorage } from '../../helpers/workWithStorage';
 
 export default function Search(props: SearchProps) {
-  const [text, setText] = useState('');
   const { searchMethod } = props;
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    const savedText = localStorage.getItem('pokedexSearch') ?? '';
-    setText(savedText);
-  }, []);
-
-  const changeSearchParameters = useCallback(
-    (page = 1, limit = 20, search = '') => {
-      const query: string[][] = [
-        ['page', page.toString()],
-        ['limit', limit.toString()],
-      ];
-      if (search) query.push(['search', search]);
-      setSearchParams(new URLSearchParams(query));
-    },
-    [setSearchParams]
-  );
+  const context = useContext(AppContext);
+  const [timer, setTimerState] = useState(0);
 
   const handleClick = (): void => {
-    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), text);
-    searchMethod(text, false);
+    context.page = 1;
+    context.changeSearchParameters();
+    searchMethod(context.search, false);
   };
 
   const makeError = () => {
-    searchMethod(text, true);
+    searchMethod(context.search, true);
   };
 
   const saveToStorage = (textForStorageSave: string) => {
-    setText(textForStorageSave);
-    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), textForStorageSave);
-    localStorage.setItem('pokedexSearch', textForStorageSave);
+    context.search = textForStorageSave;
+    writeSearchFromStorage(context.search);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    setTimerState(
+      +setTimeout(() => {
+        context.page = 1;
+      }, 600)
+    );
   };
 
   const clearInput = () => {
     saveToStorage('');
-    changeSearchParameters(1, parseInt(searchParams.get('limit') ?? '20', 10), text);
-    searchMethod('', false);
+    searchMethod(context.search, false);
   };
 
   return (
-    <div className="search">
-      <div className="wrapper">
+    <div className={styles.search}>
+      <div className={styles.wrapper}>
         <input
           type="text"
-          value={text}
+          value={context.search}
           onChange={(event) => saveToStorage(event.target.value.trim())}
           placeholder="Type something..."
         />
-        {text && (
+        {context.search && (
           <div
             tabIndex={0}
             role="button"
             onKeyDown={clearInput}
-            className="clear"
+            className={styles.clear}
             onClick={clearInput}
           >
             ❌
@@ -69,7 +61,7 @@ export default function Search(props: SearchProps) {
           search
         </button>
       </div>
-      <button type="button" className="make-error" onClick={makeError}>
+      <button type="button" className={styles.makeError} onClick={makeError}>
         Make error
       </button>
     </div>

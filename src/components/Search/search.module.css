@@ -1,12 +1,13 @@
 .search {
   display: flex;
-  grid-column: 1 / 5;
   padding: 10px;
+  width: 100%;
   justify-content: center;
 }
 
 .wrapper {
   position: relative;
+  display: flex;
 }
 
 input {
@@ -30,11 +31,10 @@ button:hover {
   background-color: var(--main-bg-color-hover);
 }
 
-.make-error {
+.makeError {
   padding: 5px 10px;
   border-radius: 10px;
   margin: 0 15px;
-  max-height: 26px;
   background-color: var(--main-error-color);
 }
 
@@ -47,34 +47,23 @@ button:hover {
 }
 
 .clear:hover {
-  scale: 1.1;
+  text-shadow: 1px 1px black;
 }
 
 @media screen and (max-width: 1300px) {
   .search {
-    grid-column-start: 1;
-    grid-column-end: 4;
     padding: 10px;
     justify-content: center;
   }
 }
 
-@media screen and (max-width: 980px) {
-  .search {
-    grid-column: 1 / 3;
-  }
-}
-
 @media screen and (max-width: 660px) {
-  .search {
-    grid-column: 1 / 2;
-  }
   input {
     min-width: 140px;
   }
 }
 
-@media screen and (max-width: 470px) {
+@media screen and (max-width: 510px) {
   .search {
     flex-direction: column;
   }
@@ -84,10 +73,10 @@ button:hover {
   }
 
   .clear {
-    right: 165px;
+    left: 165px;
   }
 
-  .make-error {
+  .makeError {
     margin: 15px auto 0 auto;
   }
 }
